@@ -1,0 +1,61 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background-color: #1e1e19;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    width: 100px; /* 원하는 너비로 설정 (예: 100px) */
+    height: auto; /* 비율을 유지하기 위해 높이는 자동으로 설정 */
+}
+
+.menu {
+    text-decoration-line: none;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* 수평 정렬 */
+}
+
+.menu li {
+    margin: 0 15px; /* 메뉴 항목 간격 */
+    cursor: pointer; /* 커서 변경 */
+}
+
+.menu a {
+    text-decoration: none;
+    color: white;
+}
+
+.icon {
+    background: none;
+    border: none;
+    font-size: 20px; /* 아이콘 크기 조정 */
+    margin-left: 15px; /* 아이콘 간격 */
+    cursor: pointer; /* 커서 변경 */
+    color: white;
+}
