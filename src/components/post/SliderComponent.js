@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useRef } from "react";
 import Slider from "react-slick"; // React Slick 임포트
-import axios from "axios";
-
+import '../../css/Slick.css'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -14,10 +13,7 @@ const SliderContent = ({ $color, children }) => {
     );
 };
 
-function HomePage() {
-    const [welComePhoto, setwelComePhoto] = useState([]); // 베스트 상품 상태 변수
-    const [loading, setLoading] = useState(true); // 로딩 상태 변수
-    const [error, setError] = useState(null); // 에러 상태 변수
+function SliderComponent() {
     const sliderRef = useRef(null); // 슬라이더 참조
 
     const list = [
@@ -29,25 +25,9 @@ function HomePage() {
         { content: 6, color: '#8013D7' },
     ];
 
-    //Best 상품 ( Id / name / price / photo ) 을 보여줌
-    // useEffect(() => {
-    //     const fetchCategories = async () => {
-    //         try {
-    //             const response = await axios.get('/api/product/list?best=”Y”'); // 베스트 아이템 리스트
-    //             setBestItem(response.data); // 가져온 데이터를 상태에 저장
-    //         } catch (error) {
-    //             setError(error); // 에러 처리
-    //         } finally {
-    //             setLoading(false); // 로딩 완료
-    //         }
-    //     };
-    //
-    //     fetchCategories(); // API 호출 함수 실행하고 ? // 컴포넌트가 처음 렌더링될 때만 실행하기
-    // }, []);
-
     // 슬라이더 설정
     const settings = {
-        dots: false, // 페이지 인디케이터 표시
+        dots: true, // 페이지 인디케이터 표시
         infinite: true, // 무한 스크롤
         speed: 1000, // 애니메이션 속도
         slidesToShow: 1, // 한 번에 보여줄 슬라이드 수
@@ -55,6 +35,7 @@ function HomePage() {
         arrows: false,
         autoplay: true,
         autoplaySpeed: 5000,
+        dotsClass: 'dots_custom',
         responsive: [
             {
                 breakpoint: 1024,
@@ -98,4 +79,4 @@ function HomePage() {
     );
 }
 
-export default HomePage;
+export default SliderComponent;

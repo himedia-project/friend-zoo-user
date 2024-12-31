@@ -1,0 +1,8 @@
+
+.shipping-info {
+    background-color: pink; /* 배송 정보 배경색 */
+    width: 100%; /* 전체 너비 */
+    text-align: center; /* 가운데 정렬 */
+    padding: 1px 0; /* 패딩 */
+    font-weight: bold; /* 글자 굵게 */
+}
