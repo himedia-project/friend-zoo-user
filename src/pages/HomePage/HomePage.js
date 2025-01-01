@@ -1,38 +1,30 @@
-import React, { useEffect, useState } from "react";
-
-import axios from "axios";
+import React, { useState } from "react";
 import SliderComponent from "../../components/post/SliderComponent";
 import BestItemsList from "../../components/post/BestItemsList";
 import Category from "../../components/post/Category";
+import PickItemList from "../../components/post/PickItemList";
+import DataFetcher from "../../api/DataFetcher";
+import NewItemList from "../../components/post/NewItemList";
 
 function HomePage() {
     const [bestItems, setBestItems] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [pickItems, setPickItems] = useState([]);
+    const [newItems, setNewItems] = useState([]);
 
-    useEffect(() => {
-        const fetchBestItems = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/api/product/list?best=Y');
-                setBestItems(response.data);
-            } catch (error) {
-                setError(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchBestItems();
-    }, []);
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error.message}</div>;
+    const handleDataFetched = (best, pick, newI) => {
+        setBestItems(best);
+        setPickItems(pick);
+        setNewItems(newI);
+    };
 
     return (
         <div>
+            <DataFetcher onDataFetched={handleDataFetched} />
             <SliderComponent />
             <Category />
             <BestItemsList bestItems={bestItems} />
+            <PickItemList pickItems={pickItems} />
+            <NewItemList newItems={newItems} />
         </div>
     );
 }

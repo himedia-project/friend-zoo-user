@@ -7,6 +7,7 @@ import NewPage from "./pages/HomePage/NewPage";
 
 import Header from "./components/layouts/Header";
 import Overlay from "./components/layouts/Overlay";
+import Footer from "./components/layouts/Footer";
 
 function App() {
     return (
@@ -30,6 +31,8 @@ function App() {
 
               <Route path="*" element={<div>404</div>} />
           </Routes>
+
+          <Footer/>
 
       </div>
     );

@@ -12,7 +12,7 @@ function Header() {
 
             <div className="header-left">
                 <Link to="/" className="logo">
-                    <img src="https://cdn.imweb.me/thumbnail/20241231/8a09d5a848629.jpg" alt="로고" />
+                    <img src="https://cdn.imweb.me/thumbnail/20250101/aeebb3fdf2805.jpg" alt="로고" />
                 </Link>
                 <nav className="menu">
                     <ul>
