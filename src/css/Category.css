@@ -1,26 +1,63 @@
-/* 반응형 CSS 적용 필수 / 현재 디자인은 임시로 적용했을 뿐 */
-
+/* 기본 스타일 */
 .category-container {
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 50px;
+    flex-wrap: wrap; /* 아이템이 줄바꿈 되도록 설정 */
 }
 
 .category-item {
-    width:80px;
-    height:80px;
+    width: 100px; /* 동그라미 크기 증가 */
+    height: 100px; /* 동그라미 크기 증가 */
     border-radius: 50%;
-    background: #c4c4c4;
+    background: white;
     font-size: 15px;
     font-weight: bold;
-    text-align:center;
-    line-height: 80px;
+    text-align: center;
+    line-height: 100px; /* 중앙 정렬을 위해 높이와 동일하게 설정 */
     cursor: pointer;
     transition: transform 0.3s;
-    margin: 0 30px;
+    margin: 0 15px; /* 간격 조정 */
+    position: relative; /* 자식 요소의 절대 위치 설정을 위해 추가 */
+    border: 1px solid #000; /* 얇은 선 추가 (색상과 두께 조정 가능) */
 }
+
+.category-item span {
+    position: absolute; /* 절대 위치 설정 */
+    bottom: -65px; /* 동그라미 아래로 위치 조정 */
+    left: 50%; /* 중앙 정렬 */
+    transform: translateX(-50%); /* 중앙 정렬 보정 */
+    color: #000; /* 글자 색상 조정 (필요시) */
+    font-size: 17px; /* 글자 크기 조정 (필요시) */
+}
+
 
 .category-item:hover {
     transform: scale(1.1); /* 마우스 오버 시 크기 증가 */
+}
+
+/* 반응형 디자인 적용 */
+@media (max-width: 768px) {
+    .category-item {
+        width: 60px;
+        height: 60px;
+        font-size: 12px;
+        line-height: 60px;
+        margin: 0 10px; /* 간격 조정 */
+    }
+}
+
+@media (max-width: 480px) {
+    .category-item {
+        width: 50px;
+        height: 50px;
+        font-size: 10px;
+        line-height: 50px;
+        margin: 0 5px; /* 간격 조정 */
+    }
+
+    .category-container {
+        margin: 20px; /* 모바일에서 여백 조정 */
+    }
 }

@@ -6,7 +6,11 @@ import NewItemList from "../../components/post/NewItemList";
 import BestItemsList from "../../components/post/BestItemsList";
 import PickItemList from "../../components/post/PickItemList";
 import StyleItemList from "../../components/post/StyleItemList";
-import useFetchProducts from "../../hooks/useFetchProducts"; // 제품을 가져오는 커스텀 훅
+
+import Dog from "../../pages/category/Dog"; // Dog 컴포넌트 가져오기
+import useFetchProducts from "../../hooks/useFetchProducts";
+import CategoryButton from "../../components/post/CategoryButton";
+import SliderComponent from "../../components/post/MainSlider"; // 카테고리 버튼 컴포넌트 가져오기
 
 const CategoryPage = () => {
     const { categoryName } = useParams();
@@ -32,7 +36,17 @@ const CategoryPage = () => {
 
     return (
         <div>
-            <h1>{categoryName || "Category Page"}</h1>
+
+            <SliderComponent/>
+
+            <h1>{categoryName || "카테고리"}</h1>
+            <CategoryButton/>
+
+            {/* /category/dog 경로의 경우 Dog 컴포넌트 표시 */}
+            {categoryName === "dog" && <Dog/>}
+
+            {/* /category 경로일 때 BestItemsList 컴포넌트 표시 */}
+            {!categoryName && <BestItemsList bestItems={products.best}/>}
 
             {/* 스위치들 */}
             {Object.keys(checkedItems).map(item => (
@@ -43,7 +57,7 @@ const CategoryPage = () => {
                             checked={checkedItems[item]}
                             onChange={handleChange}
                             name={item}
-                            inputProps={{ 'aria-label': 'controlled' }}
+                            inputProps={{'aria-label': 'controlled'}}
                         />
                     }
                     label={item.replace(/([A-Z])/g, ' $1').trim()} // CamelCase를 띄어쓰기로 변환

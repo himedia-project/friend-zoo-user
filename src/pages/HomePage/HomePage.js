@@ -1,8 +1,8 @@
 // components/HomePage.js
 import React from "react";
-import SliderComponent from "../../components/post/SliderComponent";
+import SliderComponent from "../../components/post/MainSlider";
 import BestItemsList from "../../components/post/BestItemsList";
-import Category from "../../components/post/Category";
+import CategoryButton from "../../components/post/CategoryButton";
 import useFetchProducts from "../../hooks/useFetchProducts";
 import NewItemList from "../../components/post/NewItemList"; // 커스텀 훅 import
 
@@ -12,7 +12,7 @@ function HomePage() {
     return (
         <div>
             <SliderComponent />
-            <Category />
+            <CategoryButton />
             <BestItemsList bestItems={products.best} />
             <hr/>
             <NewItemList newItems={products.new} />

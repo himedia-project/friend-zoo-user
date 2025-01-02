@@ -1,0 +1,11 @@
+.floating-image {
+    position: fixed;
+    bottom: 20px; /* 상단 위치 조정 */
+    right: 20px; /* 우측 위치 조정 */
+    z-index: 1000; /* 다른 요소 위에 표시하기 위한 z-index */
+}
+
+.floating-image img {
+    width: 15rem; /* 원하는 너비로 설정 */
+    height: auto; /* 비율을 유지하면서 높이 자동 조정 */
+}

@@ -1,4 +1,4 @@
-import Category from "../../components/post/Category";
+import CategoryButton from "../../components/post/CategoryButton";
 import StyleItemList from "../../components/post/StyleItemList";
 
 function StylePage() {
@@ -8,7 +8,7 @@ function StylePage() {
     return (
         <>
 
-            <Category/>
+            <CategoryButton/>
             <h1>STYLE</h1>
             <StyleItemList/>
 

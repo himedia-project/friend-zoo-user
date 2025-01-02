@@ -10,7 +10,8 @@ import StylePage from "./pages/HomePage/StylePage";
 import BestPage from "./pages/HomePage/BestPage";
 import NewPage from "./pages/HomePage/NewPage";
 import PickPage from "./pages/HomePage/PickPage";
-import CategoryPage from "./pages/HomePage/CategoryPage"; // 새로운 CategoryPage 컴포넌트를 import
+import CategoryPage from "./pages/HomePage/CategoryPage";
+import Kakao from "./components/layouts/Kakao"; // 새로운 CategoryPage 컴포넌트를 import
 
 function App() {
     return (
@@ -30,9 +31,13 @@ function App() {
                 <Route path="/category" element={<CategoryPage />} /> {/* /category 경로 */}
                 <Route path="/category/:categoryName" element={<CategoryPage />} /> {/* /category/:categoryName 경로 */}
 
+                {/* Kakao 컴포넌트를 특정 경로에만 표시 */}
+                <Route path="/category" element={<><CategoryPage /><Kakao /></>} />
+
                 <Route path="*" element={<div>404</div>} />
             </Routes>
 
+            <Kakao />
             <Footer/>
 
         </div>
