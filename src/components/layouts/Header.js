@@ -18,7 +18,9 @@ function Header() {
                     <ul>
                         <li><Link to="/best">BEST</Link></li>
                         <li><Link to="/new">NEW</Link></li>
-                        <li><Link to="/event">MD's Pick Sale 특가</Link></li>
+                        <li><Link to="/category">Category</Link></li>
+                        <li><Link to="/pick">MD's Pick Sale 특가</Link></li>
+
                     </ul>
                 </nav>
             </div>

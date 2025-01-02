@@ -1,30 +1,21 @@
-import React, { useState } from "react";
+// components/HomePage.js
+import React from "react";
 import SliderComponent from "../../components/post/SliderComponent";
 import BestItemsList from "../../components/post/BestItemsList";
 import Category from "../../components/post/Category";
-import PickItemList from "../../components/post/PickItemList";
-import DataFetcher from "../../api/DataFetcher";
-import NewItemList from "../../components/post/NewItemList";
+import useFetchProducts from "../../hooks/useFetchProducts";
+import NewItemList from "../../components/post/NewItemList"; // 커스텀 훅 import
 
 function HomePage() {
-    const [bestItems, setBestItems] = useState([]);
-    const [pickItems, setPickItems] = useState([]);
-    const [newItems, setNewItems] = useState([]);
-
-    const handleDataFetched = (best, pick, newI) => {
-        setBestItems(best);
-        setPickItems(pick);
-        setNewItems(newI);
-    };
+    const { products } = useFetchProducts();
 
     return (
         <div>
-            <DataFetcher onDataFetched={handleDataFetched} />
             <SliderComponent />
             <Category />
-            <BestItemsList bestItems={bestItems} />
-            <PickItemList pickItems={pickItems} />
-            <NewItemList newItems={newItems} />
+            <BestItemsList bestItems={products.best} />
+            <hr/>
+            <NewItemList newItems={products.new} />
         </div>
     );
 }
