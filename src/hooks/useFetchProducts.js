@@ -12,13 +12,9 @@ function useFetchProducts() {
             setLoading(true);
             try {
                 const bestResponse = await axiosInstance.get("/product/list?best=Y"); // 베스트
-                // const otherResponse = await axiosInstance.get("/product/list?");
-                // const newResponse = await axiosInstance.get("/product/new"); // 새로운 상품
 
                 setProducts({
                     best: bestResponse.data,
-                    // other: otherResponse.data,
-                    // new: newResponse.data,
                 });
             } catch (error) {
                 setError(error.message);
