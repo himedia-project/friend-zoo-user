@@ -1,9 +1,7 @@
 import React from "react";
 import Slider from "react-slick";
 
-import '../../css/BestItemsList.css';
-
-const BestItemsList = ({ bestItems }) => {
+const DogItemList = ({ bestItems }) => {
     if (!bestItems || bestItems.length === 0) return <div>상품이 없습니다.</div>;
 
     const settings = {
@@ -20,7 +18,7 @@ const BestItemsList = ({ bestItems }) => {
 
     return (
         <div className="bestItemsList_Container">
-            <h2 className="best-items-title">Best 상품</h2>
+            <h2 className="best-items-title">강아지 카테고리 상품</h2>
             <Slider {...settings}>
                 {bestItems.map((item) => (
                     <div className="slide-box" key={item.id}>
@@ -34,7 +32,6 @@ const BestItemsList = ({ bestItems }) => {
                         <div className="info-container">
                             <h3 className="slide-title">{item.name}</h3>
                             <p className="slide-price">{item.price} 원</p>
-                            {/*<span className="new-tag">NEW</span>*/}
                         </div>
                     </div>
                 ))}
@@ -43,4 +40,4 @@ const BestItemsList = ({ bestItems }) => {
     );
 };
 
-export default BestItemsList;
+export default DogItemList;

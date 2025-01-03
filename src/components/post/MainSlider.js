@@ -1,14 +1,15 @@
 import React, { useRef } from "react";
 import Slider from "react-slick"; // React Slick 임포트
-import '../../css/Slick.css'
+import '../../css/Slick.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+
 // 슬라이더 콘텐츠를 위한 컴포넌트
-const SliderContent = ({ $color, children }) => {
+const SliderContent = ({ img }) => {
     return (
-        <div style={{ backgroundColor: $color, height: '500px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
-            {children}
+        <div style={{ height: '50rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <img src={img} alt="Slide" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
     );
 };
@@ -17,12 +18,11 @@ function SliderComponent() {
     const sliderRef = useRef(null); // 슬라이더 참조
 
     const list = [
-        { content: 1, color: '#FF5757' },
-        { content: 2, color: '#FFBC57' },
-        { content: 3, color: '#FFEE57' },
-        { content: 4, color: '#57FF86' },
-        { content: 5, color: '#5786FF' },
-        { content: 6, color: '#8013D7' },
+        { img: require('../../img/title1.png') },
+        { img: require('../../img/title2.png') },
+        { img: require('../../img/title3.png') },
+        { img: require('../../img/title4.png') },
+        { img: require('../../img/title5.png') },
     ];
 
     // 슬라이더 설정
@@ -59,21 +59,14 @@ function SliderComponent() {
     return (
         <div>
             <div style={{ position: 'relative' }}>
-
                 <Slider ref={sliderRef} {...settings}>
                     {list.map((value, index) => (
-
                         <SliderContent
-                            $color={value.color}
+                            img={value.img}
                             key={index}>
-
-                            {value.content}
-
                         </SliderContent>
-
                     ))}
                 </Slider>
-
             </div>
         </div>
     );

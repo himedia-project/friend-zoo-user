@@ -1,10 +1,10 @@
 import React from "react";
 import Slider from "react-slick";
 
-import '../../css/BestItemsList.css';
+import '../../css/NewItemList.css';
 
-const BestItemsList = ({ bestItems }) => {
-    if (!bestItems || bestItems.length === 0) return <div>상품이 없습니다.</div>;
+const NewItemList = ({ newItems }) => {
+    if (!newItems || newItems.length === 0) return <div>상품이 없습니다.</div>;
 
     const settings = {
         dots: false,
@@ -19,10 +19,10 @@ const BestItemsList = ({ bestItems }) => {
     };
 
     return (
-        <div className="bestItemsList_Container">
-            <h2 className="best-items-title">Best 상품</h2>
+        <div className="newItemList_Container">
+            <h2 className="new-items-title">New 상품</h2>
             <Slider {...settings}>
-                {bestItems.map((item) => (
+                {newItems.map((item) => (
                     <div className="slide-box" key={item.id}>
                         <div className="image-container">
                             <img
@@ -34,7 +34,7 @@ const BestItemsList = ({ bestItems }) => {
                         <div className="info-container">
                             <h3 className="slide-title">{item.name}</h3>
                             <p className="slide-price">{item.price} 원</p>
-                            {/*<span className="new-tag">NEW</span>*/}
+                            <span className="new-tag">NEW</span>
                         </div>
                     </div>
                 ))}
@@ -43,4 +43,4 @@ const BestItemsList = ({ bestItems }) => {
     );
 };
 
-export default BestItemsList;
+export default NewItemList;

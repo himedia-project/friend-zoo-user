@@ -1,38 +1,21 @@
-import React, { useEffect, useState } from "react";
-
-import axios from "axios";
-import SliderComponent from "../../components/post/SliderComponent";
+// components/HomePage.js
+import React from "react";
+import SliderComponent from "../../components/post/MainSlider";
 import BestItemsList from "../../components/post/BestItemsList";
-import Category from "../../components/post/Category";
+import CategoryButton from "../../components/post/CategoryButton";
+import useFetchProducts from "../../hooks/useFetchProducts";
+import NewItemList from "../../components/post/NewItemList"; // 커스텀 훅 import
 
 function HomePage() {
-    const [bestItems, setBestItems] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchBestItems = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/api/product/list?best=Y');
-                setBestItems(response.data);
-            } catch (error) {
-                setError(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchBestItems();
-    }, []);
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error.message}</div>;
+    const { products } = useFetchProducts();
 
     return (
         <div>
             <SliderComponent />
-            <Category />
-            <BestItemsList bestItems={bestItems} />
+            <CategoryButton />
+            <BestItemsList bestItems={products.best} />
+            <hr/>
+            <NewItemList newItems={products.new} />
         </div>
     );
 }

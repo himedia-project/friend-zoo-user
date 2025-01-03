@@ -5,26 +5,26 @@ import '../../css/Header.css';
 import SearchIcon from '@mui/icons-material/Search';
 import LocalGroceryStoreOutlinedIcon from '@mui/icons-material/LocalGroceryStoreOutlined';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
+import logo from '../../img/logo.png';
 
 function Header() {
     return (
         <header className="header">
-
             <div className="header-left">
                 <Link to="/" className="logo">
-                    <img src="https://cdn.imweb.me/thumbnail/20241231/8a09d5a848629.jpg" alt="로고" />
+                    <img src={logo} alt="로고" /> {/* 경로로 로고 이미지 표시 */}
                 </Link>
                 <nav className="menu">
                     <ul>
                         <li><Link to="/best">BEST</Link></li>
                         <li><Link to="/new">NEW</Link></li>
-                        <li><Link to="/event">MD's Pick Sale 특가</Link></li>
+                        <li><Link to="/category">Category</Link></li>
+                        <li><Link to="/pick">MD's Pick Sale 특가</Link></li>
                     </ul>
                 </nav>
             </div>
 
             <div className="header-right">
-
                 <nav className="menu">
                     <ul>
                         <li><Link to="/">Home</Link></li>
@@ -43,7 +43,6 @@ function Header() {
                     <button className="icon"><LoginOutlinedIcon /></button>
                 </Link>
             </div>
-
         </header>
     );
 }

@@ -1,0 +1,86 @@
+.footer {
+    padding: 40px 40px 120px 40px;
+    background-color: black;
+    color: white;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    margin: 0 10px;
+}
+
+.footer-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.footer-text {
+    font-size: 15px;
+    line-height: 15px;
+    margin-bottom: 10px;
+}
+
+.gray-text {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
+.footer-link {
+    text-decoration: underline;
+    color: rgba(255, 255, 255, 0.6);
+    margin-left: 4px;
+}
+
+.footer-link:hover {
+    color: white;
+}
+
+.faq-box {
+    display: inline-block;
+    background-color: white;
+    padding: 1px;
+    border-radius: 10px;
+    margin: 1px 0;
+    cursor: pointer;
+    max-width: 150px; /* 최대 너비 설정 */
+    overflow: hidden; /* 내용이 넘칠 경우 숨김 */
+    text-overflow: ellipsis; /* 넘치는 텍스트에 말줄임표 추가 */
+    white-space: nowrap; /* 한 줄로 표시 */
+}
+
+.faq-text {
+    color: black;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.footer-divider {
+    border: none;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 40px 0;
+    grid-column: 1 / -1;
+}
+
+.footer-bottom {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.footer-bottom p {
+    margin-bottom: 4px;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}

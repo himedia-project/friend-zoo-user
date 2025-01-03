@@ -3,14 +3,14 @@ import Slider from "react-slick";
 
 import '../../css/BestItemsList.css';
 
-const BestItemsList = ({ bestItems }) => {
+const PickItemList = ({ bestItems }) => {
     if (!bestItems || bestItems.length === 0) return <div>상품이 없습니다.</div>;
 
     const settings = {
         dots: false,
         infinite: true,
         speed: 1000,
-        slidesToShow: 4,
+        slidesToShow: 3,
         slidesToScroll: 1,
         arrows: false,
         autoplay: true,
@@ -43,4 +43,4 @@ const BestItemsList = ({ bestItems }) => {
     );
 };
 
-export default BestItemsList;
+export default PickItemList;

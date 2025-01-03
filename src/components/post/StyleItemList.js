@@ -1,10 +1,10 @@
 import React from "react";
 import Slider from "react-slick";
 
-import '../../css/BestItemsList.css';
+import '../../css/StyleItemList.css'
 
-const BestItemsList = ({ bestItems }) => {
-    if (!bestItems || bestItems.length === 0) return <div>상품이 없습니다.</div>;
+const StyleItemList = ({ StyleItems }) => {
+    if (!StyleItems || StyleItems.length === 0) return <div>상품이 없습니다.</div>;
 
     const settings = {
         dots: false,
@@ -19,10 +19,10 @@ const BestItemsList = ({ bestItems }) => {
     };
 
     return (
-        <div className="bestItemsList_Container">
-            <h2 className="best-items-title">Best 상품</h2>
+        <div className="StyleItemsList_Container">
+            <h2 className="style-items-title">Best 상품</h2>
             <Slider {...settings}>
-                {bestItems.map((item) => (
+                {StyleItems.map((item) => (
                     <div className="slide-box" key={item.id}>
                         <div className="image-container">
                             <img
@@ -43,4 +43,4 @@ const BestItemsList = ({ bestItems }) => {
     );
 };
 
-export default BestItemsList;
+export default StyleItemList;
