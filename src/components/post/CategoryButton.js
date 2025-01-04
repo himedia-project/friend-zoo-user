@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../css/Category.css';
+import '../../css/CategoryButton.css';
 import dogImage from '../../img/dog.png';
 import catImage from '../../img/cat.png';
 import qukkaImage from '../../img/qukka.png';
@@ -15,15 +15,15 @@ function CategoryButton() {
     const navigate = useNavigate(); // useNavigate 훅 사용
 
     const categories = [
-        { name: 'dog', image: dogImage },
-        { name: '고양이', image: catImage },
-        { name: '쿼카', image: qukkaImage },
-        { name: '악어', image: crocodileImage },
-        { name: '라이언', image: lionImage },
-        { name: '토끼', image: rabbitImage },
-        { name: '거북이', image: turtleImage },
-        { name: '다람쥐', image: squirrelImage },
-        { name: '해달', image: otterImage }
+        { name: '강아지', url: 'dog', image: dogImage },
+        { name: '고양이', url: 'cat', image: catImage },
+        { name: '쿼카', url: 'qukka', image: qukkaImage },
+        { name: '악어', url: 'crocodile', image: crocodileImage },
+        { name: '라이언', url: 'ryan', image: lionImage },
+        { name: '토끼', url: 'rabbit', image: rabbitImage },
+        { name: '거북이', url: 'turtle', image: turtleImage },
+        { name: '다람쥐', url: 'squirrel', image: squirrelImage },
+        { name: '수달', url: 'otter', image: otterImage }
     ];
 
     return (
@@ -37,7 +37,7 @@ function CategoryButton() {
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                     }}
-                    onClick={() => navigate(`/category/${category.name}`)} // 클릭 시 이동
+                    onClick={() => navigate(`/category/${category.url}`)}
                 >
                     <span>{category.name}</span>
                 </div>
