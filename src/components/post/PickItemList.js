@@ -1,7 +1,7 @@
 import React from "react";
 import Slider from "react-slick";
 
-import '../../css/BestItemsList.css';
+import '../../css/ItemList.css';
 
 const PickItemList = ({ bestItems }) => {
     if (!bestItems || bestItems.length === 0) return <div>상품이 없습니다.</div>;

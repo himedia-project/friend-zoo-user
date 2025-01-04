@@ -2,9 +2,8 @@
 .category-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin: 50px;
-    flex-wrap: wrap; /* 아이템이 줄바꿈 되도록 설정 */
+    margin: 50px 50px;
+    flex-wrap: wrap;
 }
 
 .category-item {
@@ -18,7 +17,7 @@
     line-height: 100px; /* 중앙 정렬을 위해 높이와 동일하게 설정 */
     cursor: pointer;
     transition: transform 0.3s;
-    margin: 0 30px; /* 간격 조정 */
+    margin: 0 50px; /* 간격 조정 */
     position: relative; /* 자식 요소의 절대 위치 설정을 위해 추가 */
     border: 1px solid #000; /* 얇은 선 추가 (색상과 두께 조정 가능) */
 }

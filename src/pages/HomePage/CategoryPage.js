@@ -2,24 +2,26 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Switch, FormControlLabel } from '@mui/material';
-import NewItemList from "../../components/post/NewItemList";
-import BestItemsList from "../../components/post/BestItemsList";
-import PickItemList from "../../components/post/PickItemList";
-import StyleItemList from "../../components/post/StyleItemList";
-
-import Dog from "../../pages/category/Dog"; // Dog 컴포넌트 가져오기
-import useFetchProducts from "../../hooks/useFetchProducts";
+import BestItemsList from "../../components/post/ItemList";
 import CategoryButton from "../../components/post/CategoryButton";
-import SliderComponent from "../../components/post/MainSlider"; // 카테고리 버튼 컴포넌트 가져오기
+import SliderComponent from "../../components/post/MainSlider";
+import ItemList from "../../components/post/ItemList";
+
+const categoryTitles = {
+    dog: "강아지 카테고리",
+    cat: "고양이 카테고리",
+    quokka: "쿼카 카테고리",
+};
 
 const CategoryPage = () => {
+
+    const { categoryId } = useParams(); // URL에서 categoryId 가져오기
+
     const { categoryName } = useParams();
-    const { products } = useFetchProducts(); // 제품 데이터 가져오기
+
     const [checkedItems, setCheckedItems] = useState({
-        NewItemList: false,
-        BestItemList: false,
-        PickItemList: false,
-        StyleItemList: false,
+        ItemList: false,
+        Dog: false,
     });
 
     const handleChange = (event) => {
@@ -27,28 +29,19 @@ const CategoryPage = () => {
         setCheckedItems(prevState => ({ ...prevState, [name]: checked })); // 스위치 상태 업데이트
     };
 
+    // 체크된 항목에 대한 컴포넌트 매핑
     const itemComponents = {
-        NewItemList: <NewItemList newItems={products.new} />,
-        BestItemList: <BestItemsList bestItems={products.best} />,
-        PickItemList: <PickItemList pickItems={products.pick} />,
-        StyleItemList: <StyleItemList styleItems={products.style} />,
+        // ItemList: <BestItemsList title={`${categoryTitles[categoryName]} 상품`} items={products[categoryName]} />,
+        // 여기에 더 많은 항목을 추가할 수 있습니다.
     };
 
     return (
         <div>
+            <SliderComponent />
+            <h1>{categoryTitles[categoryName] || "카테고리"}</h1>
+            <CategoryButton />
 
-            <SliderComponent/>
-
-            <h1>{categoryName || "카테고리"}</h1>
-            <CategoryButton/>
-
-            {/* /category/dog 경로의 경우 Dog 컴포넌트 표시 */}
-            {categoryName === "dog" && <Dog/>}
-
-            {/* /category 경로일 때 BestItemsList 컴포넌트 표시 */}
-            {!categoryName && <BestItemsList bestItems={products.best}/>}
-
-            {/* 스위치들 */}
+            {/* 체크박스들 */}
             {Object.keys(checkedItems).map(item => (
                 <FormControlLabel
                     key={item}
@@ -57,10 +50,10 @@ const CategoryPage = () => {
                             checked={checkedItems[item]}
                             onChange={handleChange}
                             name={item}
-                            inputProps={{'aria-label': 'controlled'}}
+                            inputProps={{ 'aria-label': 'controlled' }}
                         />
                     }
-                    label={item.replace(/([A-Z])/g, ' $1').trim()} // CamelCase를 띄어쓰기로 변환
+                    label={item.replace(/([A-Z])/g, ' $1').trim()}
                     labelPlacement="start"
                 />
             ))}
