@@ -9,6 +9,8 @@ import '../../css/Goods.css';
 import GoodsImg1 from '../../img/goods.jpg';
 import GoodsImg2 from '../../img/goods2.jpg';
 import { API_SERVER_HOST } from '../../config/apiConfig';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteBorder';
 
 const MyPage = () => {
   const [activeTab, setActiveTab] = useState('product');
@@ -36,10 +38,10 @@ const MyPage = () => {
     try {
       if (type === 'product') {
         await changeHeartProduct(id);
-        console.log('좋아요 추가 완료');
+        console.log('좋아요 변경 완료');
       } else {
         await changeHeartContent(id);
-        console.log('좋아요 추가 완료');
+        console.log('좋아요 변경 완료');
       }
       loadHeartLists(); // 목록 새로고침
     } catch (error) {
@@ -106,12 +108,16 @@ const MyPage = () => {
                     <h2>{product.name}</h2>
                     <p>{product.description}</p>
                     <p className="price">{product.price}원</p>
-                    <button
-                      className="edit-button"
+                    <div
                       onClick={() => handleHeartClick(product.id, 'product')}
+                      style={{ cursor: 'pointer' }}
                     >
-                      찜하기
-                    </button>
+                      {product.heart ? (
+                        <FavoriteIcon style={{ color: 'red' }} />
+                      ) : (
+                        <FavoriteOutlinedIcon />
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

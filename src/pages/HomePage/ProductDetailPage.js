@@ -13,6 +13,7 @@ import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import { postChangeCart } from '../../api/cartApi';
 import AlertModal from '../../components/common/AlertModal';
 import ConfirmModal from '../../components/common/ConfirmModal';
+import { changeHeartContent, changeHeartProduct } from '../../api/heartApi';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
@@ -94,6 +95,20 @@ const ProductDetailPage = () => {
     navigate('/cart');
   };
 
+  const handleHeartClick = async (id, type) => {
+    try {
+      if (type === 'product') {
+        await changeHeartProduct(id);
+        console.log('좋아요 변경 완료');
+      } else {
+        await changeHeartContent(id);
+        console.log('좋아요 변경 완료');
+      }
+    } catch (error) {
+      console.error('Failed to update heart:', error);
+    }
+  };
+
   return (
     <div className="App">
       <ItemList title="🧸 새로나온 신상 상품! 🧩" items={products.new} />
@@ -127,10 +142,14 @@ const ProductDetailPage = () => {
             <FavoriteBorderOutlinedIcon
               style={{
                 marginLeft: '12rem',
-                color: 'gray',
+                color: '',
                 verticalAlign: 'middle',
               }}
             />
+            {/* 찜하기 버큰 */}
+            <button onClick={() => handleHeartClick(product.id, 'product')}>
+              찜하기
+            </button>
             {product.likes}
             <ShareOutlinedIcon
               style={{
