@@ -1,46 +1,64 @@
 import React from "react";
-import Slider from "react-slick";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/swiper-bundle.css";
+import '../../css/StyleItemList.css';
+import { Autoplay, Navigation, Pagination, Grid } from "swiper/modules";
+import { Link } from "react-router-dom";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 
-import '../../css/StyleItemList.css'
-
-const StyleItemList = ({ StyleItems }) => {
-    if (!StyleItems || StyleItems.length === 0) return <div>상품이 없습니다.</div>;
-
-    const settings = {
-        dots: false,
-        infinite: true,
-        speed: 1000,
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        arrows: false,
-        autoplay: true,
-        autoplaySpeed: 5000,
-        dotsClass: 'dots_custom',
-    };
+const StyleList = ({ title, items }) => {
+    if (!items || items.length === 0) return;
 
     return (
-        <div className="StyleItemsList_Container">
-            <h2 className="style-items-title">Best 상품</h2>
-            <Slider {...settings}>
-                {StyleItems.map((item) => (
-                    <div className="slide-box" key={item.id}>
-                        <div className="image-container">
-                            <img
-                                src="https://cdn.imweb.me/thumbnail/20241125/e9bf53edb1c0c.jpg"
-                                alt={item.name}
-                                className="slide-image"
-                            />
+        <div className="StyleList">
+            <h2 className="StyleListTitle">{title}</h2>
+            <Swiper
+                loop={true}
+                modules={[Navigation, Autoplay, Pagination, Grid]}
+                rewind={true}
+                slidesPerView={4}
+                grid={{
+                    rows: 10,
+                    fill: "row",
+                }}
+                pagination={{
+                    el: ".pagination_bullet",
+                    clickable: true,
+                    type: 'bullets',
+                    renderBullet: function (index, className) {
+                        return '<span class="' + className + '">' + (index + 1) + "</span>";
+                    },
+                }}
+            >
+                {items.map((item) => (
+                    <SwiperSlide key={item.id}>
+                        <div className="StyleListBox">
+                            <Link to={`/product/${item.id}`}>
+                                <div className="StyleListImageContainer">
+                                    <img
+                                        src={"https://cdn.imweb.me/thumbnail/20241125/d781269838648.jpg"}
+                                        alt={item.name}
+                                        className="StyleListImage"
+                                    />
+                                    <div className="StyleListOverlay">
+                                        <div className="ProfileAndHeart">
+                                            <img
+                                                src="https://via.placeholder.com/40"
+                                                alt="Profile"
+                                                className="ProfileImage"
+                                            />
+                                            <FavoriteBorderOutlinedIcon
+                                                style={{marginLeft: '230px', color: 'gray', verticalAlign: 'middle'}}/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
                         </div>
-                        <div className="info-container">
-                            <h3 className="slide-title">{item.name}</h3>
-                            <p className="slide-price">{item.price} 원</p>
-                            {/*<span className="new-tag">NEW</span>*/}
-                        </div>
-                    </div>
+                    </SwiperSlide>
                 ))}
-            </Slider>
+            </Swiper>
         </div>
     );
 };
 
-export default StyleItemList;
+export default StyleList;

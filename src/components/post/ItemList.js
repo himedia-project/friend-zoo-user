@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import {getBestItemProductList, getImageView, getNewItemProductList} from "../../api/productApi";
 
 const ItemList = ({ title, items }) => {
-    if (!items || items.length === 0) return <div>상품을 불러올 수 없습니다.</div>;
+    if (!items || items.length === 0) return;
 
     return (
         <div className="ItemList">
