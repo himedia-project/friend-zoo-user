@@ -46,7 +46,7 @@ const CartPage = () => {
   const handleRemove = async (cartItemId, productId) => {
     if (window.confirm('삭제하시겠습니까?')) {
       try {
-        await postChangeCart(cartItemId, productId, 0);
+        await postChangeCart({ cartItemId, productId, qty: 0 });
         await fetchCartItems(); // 장바구니 목록 새로고침
         alert('삭제되었습니다.');
       } catch (error) {
