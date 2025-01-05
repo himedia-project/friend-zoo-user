@@ -29,9 +29,6 @@ const HomePage = () => {
         }
     };
 
-    if (loading) return <div>로딩 중...</div>; // 로딩 중 표시
-    if (error) return <div>상품을 불러오는 데 문제가 발생했습니다: {error.message}</div>; // 에러 표시
-
     return (
         <div>
             <SliderComponent/>
