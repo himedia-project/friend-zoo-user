@@ -41,7 +41,7 @@ function App() {
 
         {/*메인*/}
         <Route path="/category/:categoryName" element={<CategoryPage />} />
-        <Route path="/product/:id" element={<ProductDetailPage />} />
+        <Route path="/product/:productId" element={<ProductDetailPage />} />
 
         {/*우측*/}
         <Route path="/join" element={<JoinPage />} />

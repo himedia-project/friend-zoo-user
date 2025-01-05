@@ -3,6 +3,14 @@ import '../../css/CartPage.css';
 import CartItem from '../../components/cart/CartItem';
 import { getCartItems } from '../../api/cartApi';
 
+const initState = {
+  items: [],
+  itemTotal: 0,
+  shippingTotal: 0,
+  discountTotal: 0,
+  totalAmount: 0,
+};
+
 const CartPage = () => {
   // const [items, setItems] = useState([
   //   {
