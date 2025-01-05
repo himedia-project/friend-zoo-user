@@ -4,6 +4,7 @@ import { loginPost } from '../../api/loginApi';
 import '../../css/LoginPage.css';
 import { login } from '../../redux/loginSlice';
 import { useDispatch } from 'react-redux';
+import AlertModal from '../../components/common/AlertModal';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -12,6 +13,12 @@ const LoginPage = () => {
     email: '',
     password: '',
     // rememberEmail: false,
+  });
+  const [alertModal, setAlertModal] = useState({
+    open: false,
+    title: '',
+    message: '',
+    isSuccess: false,
   });
 
   const handleChange = (e) => {
@@ -31,12 +38,23 @@ const LoginPage = () => {
       console.log('로그인 성공:', response);
 
       dispatch(login(response));
-      alert('로그인 되었습니다.');
-      // 로그인 성공 시 메인 페이지로 이동
-      navigate('/');
+      setAlertModal({
+        open: true,
+        title: '로그인 성공',
+        message: '로그인 되었습니다.',
+        isSuccess: true,
+        onSuccess: () => {
+          navigate('/');
+        },
+      });
     } catch (error) {
       console.error('로그인 실패:', error);
-      alert('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
+      setAlertModal({
+        open: true,
+        title: '로그인 실패',
+        message: '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.',
+        isSuccess: false,
+      });
     }
   };
 
@@ -94,6 +112,17 @@ const LoginPage = () => {
       <div className="guest-order">
         <Link to="/join">회원가입</Link>
       </div>
+
+      <AlertModal
+        open={alertModal.open}
+        onClose={() => {
+          setAlertModal({ ...alertModal, open: false });
+          alertModal.onSuccess?.();
+        }}
+        title={alertModal.title}
+        message={alertModal.message}
+        isSuccess={alertModal.isSuccess}
+      />
     </div>
   );
 };

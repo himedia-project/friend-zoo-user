@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../../css/SignIn.css';
 import { signupPost } from '../../api/loginApi';
 import { useNavigate } from 'react-router-dom';
+import AlertModal from '../../components/common/AlertModal';
 
 const SignInPage = () => {
   const navigate = useNavigate();
@@ -13,6 +14,12 @@ const SignInPage = () => {
     name: '',
     contact: '',
   });
+  const [alertModal, setAlertModal] = useState({
+    open: false,
+    title: '',
+    message: '',
+    isSuccess: false,
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,19 +29,33 @@ const SignInPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 회원가입 처리 로직 추가
-    console.log(formData);
-    signupPost(
-      formData.name,
-      formData.email,
-      formData.password,
-      formData.phone,
-    );
-    console.log('회원가입 완료');
-    alert('회원가입 완료하였습니다');
-    navigate('/login');
+    try {
+      await signupPost(
+        formData.name,
+        formData.email,
+        formData.password,
+        formData.phone,
+      );
+      setAlertModal({
+        open: true,
+        title: '회원가입 성공',
+        message: '회원가입이 완료되었습니다.',
+        isSuccess: true,
+        onSuccess: () => {
+          navigate('/login');
+        },
+      });
+    } catch (error) {
+      console.error('회원가입 실패:', error);
+      setAlertModal({
+        open: true,
+        title: '회원가입 실패',
+        message: '회원가입에 실패했습니다. 다시 시도해주세요.',
+        isSuccess: false,
+      });
+    }
   };
 
   return (
@@ -100,6 +121,17 @@ const SignInPage = () => {
         <span>이미 계정이 있으신가요?</span>
         <Link to="/login"> 로그인</Link>
       </div>
+
+      <AlertModal
+        open={alertModal.open}
+        onClose={() => {
+          setAlertModal({ ...alertModal, open: false });
+          alertModal.onSuccess?.();
+        }}
+        title={alertModal.title}
+        message={alertModal.message}
+        isSuccess={alertModal.isSuccess}
+      />
     </div>
   );
 };
