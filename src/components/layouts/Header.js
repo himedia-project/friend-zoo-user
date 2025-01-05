@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutPost } from '../../api/loginApi';
 import { logout } from '../../redux/loginSlice';
 import AlertModal from '../common/AlertModal';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 
 function Header() {
   const navigate = useNavigate();
@@ -81,14 +82,16 @@ function Header() {
               <li>
                 <Link to="/style">Style</Link>
               </li>
-              <li>
-                <Link to="/shop">Shop</Link>
-              </li>
             </ul>
           </nav>
           <Link to="/search">
             <button className="icon">
               <SearchIcon />
+            </button>
+          </Link>
+          <Link to="/heart">
+            <button className="icon">
+              <FavoriteOutlinedIcon />
             </button>
           </Link>
           <Link to="/cart">

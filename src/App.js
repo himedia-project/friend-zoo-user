@@ -15,7 +15,6 @@ import Kakao from './components/layouts/Kakao';
 
 import JoinPage from './pages/login/JoinPage';
 import LoginPage from './pages/login/LoginPage';
-import MyPage from './pages/login/MyPage';
 
 import CartPage from './pages/order/CartPage';
 import OrderPage from './pages/order/OrderPage';
@@ -23,6 +22,7 @@ import OrderCompletePage from './pages/order/OrderCompletePage';
 
 import ProductDetailPage from './pages/HomePage/ProductDetailPage';
 import SignInPage from './pages/login/SignInPage';
+import MyPage from './pages/My/MyPage';
 
 function App() {
   return (
@@ -47,7 +47,7 @@ function App() {
         <Route path="/join" element={<JoinPage />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/heart" element={<MyPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/order" element={<OrderPage />} />
         <Route path="/order/complete" element={<OrderCompletePage />} />
