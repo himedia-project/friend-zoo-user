@@ -63,7 +63,7 @@ const CartPage = () => {
       0,
     );
     const shippingTotal = 0; // For simplicity, we assume free shipping
-    const discountTotal = 5600; // Assume a fixed discount for demonstration purposes
+    const discountTotal = 0; // Assume a fixed discount for demonstration purposes
     return { itemTotal, shippingTotal, discountTotal };
   };
 
