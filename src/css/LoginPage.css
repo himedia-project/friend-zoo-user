@@ -1,0 +1,94 @@
+/* styles.css */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+.social-login {
+  width: 100%;
+  margin: 20px 0;
+}
+
+.social-login button {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.login-form {
+  width: 100%;
+}
+
+.login-form input[type='email'],
+.login-form input[type='password'] {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.or-section {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.or-section hr {
+  flex: 1;
+  height: 1px;
+  background-color: #ddd;
+  border: none;
+}
+
+.or-section span {
+  padding: 0 10px;
+  color: #666;
+}
+
+.footer-links,
+.guest-order {
+  margin-top: 20px;
+}
+
+/* 소셜 로그인 버튼 스타일 */
+.google-btn {
+  background-color: #4285f4;
+  color: white;
+}
+
+.naver-btn {
+  background-color: #03c75a;
+  color: white;
+}
+
+.kakao-btn {
+  background-color: #fee500;
+  color: #000;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  margin: 15px 0;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

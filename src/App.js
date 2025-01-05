@@ -22,41 +22,43 @@ import OrderPage from './pages/order/OrderPage';
 import OrderCompletePage from './pages/order/OrderCompletePage';
 
 import ProductDetailPage from './pages/HomePage/ProductDetailPage';
+import SignInPage from './pages/login/SignInPage';
 
 function App() {
-    return (
-        <div className="App">
-            <Overlay />
-            <Header />
+  return (
+    <div className="App">
+      <Overlay />
+      <Header />
 
-            <Routes>
-                {/*좌측*/}
-                <Route path="/" element={<HomePage />} />
-                <Route path="/style" element={<StylePage />} />
-                <Route path="/new" element={<NewPage />} />
-                <Route path="/best" element={<BestPage />} />
-                <Route path="/category" element={<CategoryPage />} />
-                <Route path="/pick" element={<PickPage />} />
+      <Routes>
+        {/*좌측*/}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/style" element={<StylePage />} />
+        <Route path="/new" element={<NewPage />} />
+        <Route path="/best" element={<BestPage />} />
+        <Route path="/category" element={<CategoryPage />} />
+        <Route path="/pick" element={<PickPage />} />
 
-                {/*메인*/}
-                <Route path="/category/:categoryName" element={<CategoryPage />} />
-                <Route path="/product/:id" element={<ProductDetailPage />} />
+        {/*메인*/}
+        <Route path="/category/:categoryName" element={<CategoryPage />} />
+        <Route path="/product/:id" element={<ProductDetailPage />} />
 
-                {/*우측*/}
-                <Route path="/join" element={<JoinPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/mypage" element={<MyPage />} />
-                <Route path="/cart" element={<CartPage />} />
-                <Route path="/order" element={<OrderPage />} />
-                <Route path="/order/complete" element={<OrderCompletePage />} />
+        {/*우측*/}
+        <Route path="/join" element={<JoinPage />} />
+        <Route path="/signin" element={<SignInPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/order" element={<OrderPage />} />
+        <Route path="/order/complete" element={<OrderCompletePage />} />
 
-                <Route path="*" element={<div>404</div>} />
-            </Routes>
+        <Route path="*" element={<div>404</div>} />
+      </Routes>
 
-            <Kakao />
-            <Footer />
-        </div>
-    );
+      <Kakao />
+      <Footer />
+    </div>
+  );
 }
 
 export default App;
