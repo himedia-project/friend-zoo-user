@@ -1,60 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/CartPage.css';
 import CartItem from '../../components/cart/CartItem';
-import { getCartItems } from '../../api/cartApi';
-
-const initState = {
-  items: [],
-  itemTotal: 0,
-  shippingTotal: 0,
-  discountTotal: 0,
-  totalAmount: 0,
-};
+import { getCartItems, postChangeCart } from '../../api/cartApi';
 
 const CartPage = () => {
-  // const [items, setItems] = useState([
-  //   {
-  //     id: 1,
-  //     name: '무언',
-  //     option: '빨강',
-  //     quantity: 1,
-  //     price: 7900,
-  //     selected: true,
-  //     image: cartImage1,
-  //   },
-  //   {
-  //     id: 2,
-  //     name: '무언',
-  //     option: '파랑',
-  //     quantity: 1,
-  //     price: 7900,
-  //     selected: true,
-  //     image: cartImage2,
-  //   },
-  //   {
-  //     id: 3,
-  //     name: '무언',
-  //     option: '노랑',
-  //     quantity: 1,
-  //     price: 7900,
-  //     selected: true,
-  //     image: cartImage3,
-  //   },
-  // ]);
-
   const [items, setItems] = useState([]);
 
+  const fetchCartItems = async () => {
+    const res = await getCartItems();
+    const formattedItems = res.map((item) => ({
+      id: item.cartItemId,
+      name: item.productName,
+      quantity: item.qty,
+      price: item.price,
+      selected: true,
+      image: item.imageName,
+      productId: item.productId,
+      discountPrice: item.discountPrice,
+    }));
+    setItems(formattedItems);
+  };
+
   useEffect(() => {
-    getCartItems().then((res) => {
-      console.log(res);
-      setItems(res);
-    });
+    fetchCartItems();
   }, []);
 
   const handleQuantityChange = (id, action) => {
     setItems(
       items.map((item) => {
         if (item.id === id) {
+          // cartItemId를 기준으로 비교
           if (action === 'increase') {
             return { ...item, quantity: item.quantity + 1 };
           } else if (action === 'decrease' && item.quantity > 1) {
@@ -68,8 +43,17 @@ const CartPage = () => {
     );
   };
 
-  const handleRemove = (id) => {
-    setItems(items.filter((item) => item.id !== id));
+  const handleRemove = async (cartItemId, productId) => {
+    if (window.confirm('삭제하시겠습니까?')) {
+      try {
+        await postChangeCart(cartItemId, productId, 0);
+        await fetchCartItems(); // 장바구니 목록 새로고침
+        alert('삭제되었습니다.');
+      } catch (error) {
+        alert('삭제 중 오류가 발생했습니다.');
+        console.error(error);
+      }
+    }
   };
 
   const calculateTotals = () => {
@@ -112,7 +96,7 @@ const CartPage = () => {
         ))}
       </div>
       <div className="order-summary">
-        <h2>주문정보</h2>
+        <h2>주문 예상 금액</h2>
         <div className="order-details">
           <div className="order-item">
             <span>총 물품금액</span>
