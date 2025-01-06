@@ -33,15 +33,11 @@ export const getStyleItemProductList = async () => {
   return response.data;
 };
 
-// 상품사진
-export const getImageView = async (fileName) => {
-  const response = await axiosInstance.get(`/view/${fileName}`);
-  return response.data;
-};
-
 // 카테고리 조회
 export const getCategoryId = async (categoryId) => {
-  const response = await axiosInstance.get(`/detail/category/${categoryId}`);
+  const response = await axiosInstance.get(
+    `/product/detail/category/${categoryId}`,
+  );
   return response.data;
 };
 

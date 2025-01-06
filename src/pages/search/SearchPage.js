@@ -8,6 +8,7 @@ import {
   getSearchProductList,
 } from '../../api/productApi';
 import '../../css/SearchPage.css';
+import { API_SERVER_HOST } from '../../config/apiConfig';
 
 const SearchPage = () => {
   const [searchParams] = useSearchParams();
@@ -95,7 +96,7 @@ const SearchPage = () => {
                 style={{ cursor: 'pointer' }}
               >
                 <img
-                  src={`http://localhost:8080/api/product/view/${item.uploadFileNames[0]}`}
+                  src={`${API_SERVER_HOST}/api/product/view/${item.uploadFileNames[0]}`}
                   alt={item.name}
                 />
                 <div className="product-info">
@@ -129,7 +130,7 @@ const SearchPage = () => {
                   style={{ cursor: 'pointer' }}
                 >
                   <img
-                    src={`http://localhost:8080/api/product/view/${item.uploadFileNames[0]}`}
+                    src={`${API_SERVER_HOST}/api/product/view/${item.uploadFileNames[0]}`}
                     alt={item.name}
                   />
                   <div className="product-info">
@@ -164,7 +165,7 @@ const SearchPage = () => {
                   style={{ cursor: 'pointer' }}
                 >
                   <img
-                    src={`http://localhost:8080/api/product/view/${item.uploadFileNames[0]}`}
+                    src={`${API_SERVER_HOST}/api/product/view/${item.uploadFileNames[0]}`}
                     alt={item.name}
                   />
                   <div className="product-info">
@@ -199,7 +200,7 @@ const SearchPage = () => {
                   style={{ cursor: 'pointer' }}
                 >
                   <img
-                    src={`http://localhost:8080/api/product/view/${item.uploadFileNames[0]}`}
+                    src={`${API_SERVER_HOST}/api/product/view/${item.uploadFileNames[0]}`}
                     alt={item.name}
                   />
                   <div className="product-info">
