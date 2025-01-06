@@ -4,7 +4,7 @@ import { loginPost } from '../../api/loginApi';
 import '../../css/LoginPage.css';
 import { login } from '../../redux/loginSlice';
 import { useDispatch } from 'react-redux';
-import AlertModal from '../../components/common/AlertModal';
+import Swal from 'sweetalert2'; // SweetAlert2 임포트
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -12,13 +12,6 @@ const LoginPage = () => {
   const [loginForm, setLoginForm] = useState({
     email: '',
     password: '',
-    // rememberEmail: false,
-  });
-  const [alertModal, setAlertModal] = useState({
-    open: false,
-    title: '',
-    message: '',
-    isSuccess: false,
   });
 
   const handleChange = (e) => {
@@ -26,7 +19,6 @@ const LoginPage = () => {
 
     setLoginForm((prev) => ({
       ...prev,
-
       [name]: value,
     }));
   };
@@ -38,22 +30,23 @@ const LoginPage = () => {
       console.log('로그인 성공:', response);
 
       dispatch(login(response));
-      setAlertModal({
-        open: true,
+      Swal.fire({
         title: '로그인 성공',
-        message: '로그인 되었습니다.',
-        isSuccess: true,
-        onSuccess: () => {
+        text: '로그인 되었습니다.',
+        icon: 'success',
+        confirmButtonText: '확인',
+      }).then((result) => {
+        if (result.isConfirmed) {
           navigate('/');
-        },
+        }
       });
     } catch (error) {
       console.error('로그인 실패:', error);
-      setAlertModal({
-        open: true,
+      Swal.fire({
         title: '로그인 실패',
-        message: '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.',
-        isSuccess: false,
+        text: '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.',
+        icon: 'error',
+        confirmButtonText: '확인',
       });
     }
   };
@@ -69,9 +62,9 @@ const LoginPage = () => {
       </div>
 
       <div className="or-section">
-        <hr></hr>
+        <hr />
         <span>또는</span>
-        <hr></hr>
+        <hr />
       </div>
 
       <form className="login-form" onSubmit={handleSubmit}>
@@ -91,15 +84,6 @@ const LoginPage = () => {
           onChange={handleChange}
           required
         />
-        {/* <label>
-          <input
-            type="checkbox"
-            name="rememberEmail"
-            checked={loginForm.rememberEmail}
-            onChange={handleChange}
-          />{' '}
-          이메일 기억하기
-        </label> */}
         <button type="submit" className="login-btn">
           로그인
         </button>
@@ -112,17 +96,6 @@ const LoginPage = () => {
       <div className="guest-order">
         <Link to="/join">회원가입</Link>
       </div>
-
-      <AlertModal
-        open={alertModal.open}
-        onClose={() => {
-          setAlertModal({ ...alertModal, open: false });
-          alertModal.onSuccess?.();
-        }}
-        title={alertModal.title}
-        message={alertModal.message}
-        isSuccess={alertModal.isSuccess}
-      />
     </div>
   );
 };

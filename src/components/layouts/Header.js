@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Link 컴포넌트 가져오기
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import '../../css/Header.css';
-
 import SearchIcon from '@mui/icons-material/Search';
 import LocalGroceryStoreOutlinedIcon from '@mui/icons-material/LocalGroceryStoreOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -9,16 +8,15 @@ import logo from '../../img/logo.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutPost } from '../../api/loginApi';
 import { logout } from '../../redux/loginSlice';
-import AlertModal from '../common/AlertModal';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import useCustomLogin from '../../hooks/useCustomLogin';
+import Swal from 'sweetalert2'; // SweetAlert2 임포트
 
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { email } = useSelector((state) => state.loginSlice);
-  const { alertModal, setAlertModal, handleAuthError, requireAuth } =
-    useCustomLogin();
+  const { handleAuthError, requireAuth } = useCustomLogin();
 
   const handleProtectedAction = (path) => {
     if (requireAuth(email)) {
@@ -30,22 +28,21 @@ function Header() {
     try {
       await logoutPost();
       dispatch(logout());
-      setAlertModal({
-        open: true,
+      Swal.fire({
         title: '로그아웃 성공',
-        message: '로그아웃 되었습니다.',
-        isSuccess: true,
-        onSuccess: () => {
-          navigate('/login');
-        },
+        text: '로그아웃 되었습니다.',
+        icon: 'success',
+        confirmButtonText: '확인',
+      }).then(() => {
+        navigate('/login');
       });
     } catch (error) {
       if (!handleAuthError(error)) {
-        setAlertModal({
-          open: true,
+        Swal.fire({
           title: '로그아웃 실패',
-          message: '로그아웃에 실패했습니다.',
-          isSuccess: false,
+          text: '로그아웃에 실패했습니다.',
+          icon: 'error',
+          confirmButtonText: '확인',
         });
       }
     }
@@ -56,7 +53,7 @@ function Header() {
       <header className="header">
         <div className="header-left">
           <Link to="/" className="logo">
-            <img src={logo} alt="로고" /> {/* 경로로 로고 이미지 표시 */}
+            <img src={logo} alt="로고" />
           </Link>
           <nav className="menu">
             <ul>
@@ -79,9 +76,6 @@ function Header() {
               <li>
                 <Link to="/">Home</Link>
               </li>
-              {/* <li>
-                <Link to="/style">Style</Link>
-              </li> */}
             </ul>
           </nav>
           <Link to="/search">
@@ -114,17 +108,6 @@ function Header() {
           )}
         </div>
       </header>
-
-      <AlertModal
-        open={alertModal.open}
-        onClose={() => {
-          setAlertModal({ ...alertModal, open: false });
-          alertModal.onSuccess?.();
-        }}
-        title={alertModal.title}
-        message={alertModal.message}
-        isSuccess={alertModal.isSuccess}
-      />
     </>
   );
 }
