@@ -30,7 +30,7 @@ const MySidebar = () => {
         </li>
         <li>
           <Link
-            to="/my/edit"
+            // to="/my/edit"
             className={`sidebar-link ${
               location.pathname === '/my/edit' ? 'active' : ''
             }`}
@@ -40,7 +40,7 @@ const MySidebar = () => {
         </li>
         <li>
           <Link
-            to="/my/withdraw"
+            // to="/my/withdraw"
             className={`sidebar-link ${
               location.pathname === '/my/withdraw' ? 'active' : ''
             }`}
