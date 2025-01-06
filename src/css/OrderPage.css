@@ -125,3 +125,24 @@
   border-radius: 8px;
   margin: 20px 0;
 }
+
+.product-purchase-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.product-purchase-info .quantity {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.product-purchase-info .price {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.product-purchase-info .price strong {
+  font-weight: 600;
+}

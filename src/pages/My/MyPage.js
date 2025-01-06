@@ -104,23 +104,38 @@ const MyPage = () => {
                         alt={product.name}
                       />
                       <div className="product-details">
-                        <h2>{product.name}</h2>
-                        <p>{product.description}</p>
-                        <p className="price">{product.price}원</p>
+                        <h2>
+                          {product.name.split('|').map((part, index) => (
+                            <span
+                              key={index}
+                              className={index > 0 ? 'product-info-sub' : ''}
+                            >
+                              {part}
+                              {index < product.name.split('|').length - 1 && (
+                                <br />
+                              )}
+                            </span>
+                          ))}
+                        </h2>
                       </div>
                     </div>
-                    <div
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleHeartClick(product.id, 'product');
-                      }}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      {product.heart ? (
-                        <FavoriteIcon style={{ color: 'red' }} />
-                      ) : (
-                        <FavoriteOutlinedIcon />
-                      )}
+                    <div className="product-right">
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleHeartClick(product.id, 'product');
+                        }}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        {product.heart ? (
+                          <FavoriteIcon style={{ color: 'red' }} />
+                        ) : (
+                          <FavoriteOutlinedIcon />
+                        )}
+                      </div>
+                      <p className="price">
+                        {product.price.toLocaleString()}원
+                      </p>
                     </div>
                   </div>
                 ))

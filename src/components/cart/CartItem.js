@@ -39,7 +39,9 @@ const CartItem = ({ item, onQuantityChange, onRemove }) => {
         <span>{item.quantity}</span>
         <button onClick={() => onQuantityChange(item.id, 'increase')}>+</button>
       </div>
-      <div className="item-price">{item.quantity * item.price}원</div>
+      <div className="item-price">
+        {(item.quantity * item.price).toLocaleString()}원
+      </div>
       <div className="item-shipping">무료</div>
       <div className="item-actions">
         <button onClick={() => onRemove(item.id, item.productId)}>삭제</button>

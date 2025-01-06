@@ -176,3 +176,9 @@
   background-color: #cccccc;
   cursor: not-allowed;
 }
+
+.product-info-sub {
+  font-size: 0.9em;
+  color: #666;
+  font-weight: normal;
+}

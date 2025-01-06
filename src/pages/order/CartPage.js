@@ -3,10 +3,24 @@ import '../../css/CartPage.css';
 import CartItem from '../../components/cart/CartItem';
 import { getCartItems, postChangeCart } from '../../api/cartApi';
 import { useNavigate } from 'react-router-dom';
+import ConfirmModal from '../../components/common/ConfirmModal';
+import AlertModal from '../../components/common/AlertModal';
 
 const CartPage = () => {
   const [items, setItems] = useState([]);
   const navigate = useNavigate();
+  const [confirmModal, setConfirmModal] = useState({
+    open: false,
+    title: '',
+    message: '',
+    onConfirm: null,
+  });
+  const [alertModal, setAlertModal] = useState({
+    open: false,
+    title: '',
+    message: '',
+    isSuccess: true,
+  });
 
   const fetchCartItems = async () => {
     const res = await getCartItems();
@@ -45,17 +59,34 @@ const CartPage = () => {
     );
   };
 
-  const handleRemove = async (cartItemId, productId) => {
-    if (window.confirm('삭제하시겠습니까?')) {
-      try {
-        await postChangeCart({ cartItemId, productId, qty: 0 });
-        await fetchCartItems(); // 장바구니 목록 새로고침
-        alert('삭제되었습니다.');
-      } catch (error) {
-        alert('삭제 중 오류가 발생했습니다.');
-        console.error(error);
-      }
-    }
+  const handleRemove = (cartItemId, productId) => {
+    setConfirmModal({
+      open: true,
+      title: '상품 삭제',
+      message: '삭제하시겠습니까?',
+      onConfirm: async () => {
+        try {
+          await postChangeCart({ cartItemId, productId, qty: 0 });
+          await fetchCartItems();
+          setConfirmModal({ ...confirmModal, open: false });
+          setAlertModal({
+            open: true,
+            title: '삭제 완료',
+            message: '삭제되었습니다.',
+            isSuccess: true,
+          });
+        } catch (error) {
+          setConfirmModal({ ...confirmModal, open: false });
+          setAlertModal({
+            open: true,
+            title: '오류',
+            message: '삭제 중 오류가 발생했습니다.',
+            isSuccess: false,
+          });
+          console.error(error);
+        }
+      },
+    });
   };
 
   const calculateTotals = () => {
@@ -88,71 +119,91 @@ const CartPage = () => {
   };
 
   return (
-    <div className="cart-wrapper">
-      <div className="cart">
-        {items.length === 0 ? (
-          <div className="empty-cart-message">
-            장바구니에 담은 상품이 없습니다.
-          </div>
-        ) : (
-          <>
-            <div className="cart-header">
-              <input
-                type="checkbox"
-                checked={items.every((item) => item.selected)}
-                onChange={() => {
-                  const allSelected = items.every((item) => item.selected);
-                  setItems(
-                    items.map((item) => ({ ...item, selected: !allSelected })),
-                  );
-                }}
-              />
-              <span>전체 선택</span>
+    <>
+      <div className="cart-wrapper">
+        <div className="cart">
+          {items.length === 0 ? (
+            <div className="empty-cart-message">
+              장바구니에 담은 상품이 없습니다.
             </div>
-            {items.map((item) => (
-              <CartItem
-                key={item.id}
-                item={item}
-                onQuantityChange={handleQuantityChange}
-                onRemove={handleRemove}
-              />
-            ))}
-          </>
-        )}
-      </div>
-      <div className="order-summary">
-        <h2>주문 예상 금액</h2>
-        <div className="order-details">
-          <div className="order-item">
-            <span>총 물품금액</span>
-            <span>{itemTotal.toLocaleString()}원</span>
-          </div>
-          <div className="order-item">
-            <span>총 배송비</span>
-            <span>{shippingTotal.toLocaleString()}원</span>
-          </div>
-          <div className="order-item discount">
-            <span>총 할인금액</span>
-            <span class="color-red">{discountTotal.toLocaleString()}원</span>
-          </div>
-          <hr></hr>
-          <div className="order-total">
-            <span>총 금액</span>
-            <span>{totalAmount.toLocaleString()}원</span>
-          </div>
+          ) : (
+            <>
+              <div className="cart-header">
+                <input
+                  type="checkbox"
+                  checked={items.every((item) => item.selected)}
+                  onChange={() => {
+                    const allSelected = items.every((item) => item.selected);
+                    setItems(
+                      items.map((item) => ({
+                        ...item,
+                        selected: !allSelected,
+                      })),
+                    );
+                  }}
+                />
+                <span>전체 선택</span>
+              </div>
+              {items.map((item) => (
+                <CartItem
+                  key={item.id}
+                  item={item}
+                  onQuantityChange={handleQuantityChange}
+                  onRemove={handleRemove}
+                />
+              ))}
+            </>
+          )}
         </div>
-        <ul className="order-notes">
-          <li>장바구니에 담긴 상품은 일년간 보관합니다.</li>
-          <li>쿠폰 및 포인트는 주문 결제 페이지에서 적용 가능합니다.</li>
-          <li>판매 종료한 상품은 자동 삭제됩니다.</li>
-          <li>환불 시 쿠폰 및 포인트 사용에 제한이 있을 수 있습니다.</li>
-          <li>도서산간 지역은 추가 배송비가 발생할 수 있습니다.</li>
-        </ul>
-        <button className="purchase-button" onClick={handlePurchase}>
-          구매하기 (총 {items.filter((item) => item.selected).length}건)
-        </button>
+        <div className="order-summary">
+          <h2>주문 예상 금액</h2>
+          <div className="order-details">
+            <div className="order-item">
+              <span>총 물품금액</span>
+              <span>{itemTotal.toLocaleString()}원</span>
+            </div>
+            <div className="order-item">
+              <span>총 배송비</span>
+              <span>{shippingTotal.toLocaleString()}원</span>
+            </div>
+            <div className="order-item discount">
+              <span>총 할인금액</span>
+              <span class="color-red">{discountTotal.toLocaleString()}원</span>
+            </div>
+            <hr></hr>
+            <div className="order-total">
+              <span>총 금액</span>
+              <span>{totalAmount.toLocaleString()}원</span>
+            </div>
+          </div>
+          <ul className="order-notes">
+            <li>장바구니에 담긴 상품은 일년간 보관합니다.</li>
+            <li>쿠폰 및 포인트는 주문 결제 페이지에서 적용 가능합니다.</li>
+            <li>판매 종료한 상품은 자동 삭제됩니다.</li>
+            <li>환불 시 쿠폰 및 포인트 사용에 제한이 있을 수 있습니다.</li>
+            <li>도서산간 지역은 추가 배송비가 발생할 수 있습니다.</li>
+          </ul>
+          <button className="purchase-button" onClick={handlePurchase}>
+            구매하기 (총 {items.filter((item) => item.selected).length}건)
+          </button>
+        </div>
       </div>
-    </div>
+      <ConfirmModal
+        open={confirmModal.open}
+        onClose={() => setConfirmModal({ ...confirmModal, open: false })}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        isSuccess={true}
+        onConfirm={confirmModal.onConfirm}
+      />
+      <AlertModal
+        open={alertModal.open}
+        onClose={() => setAlertModal({ ...alertModal, open: false })}
+        title={alertModal.title}
+        message={alertModal.message}
+        isSuccess={alertModal.isSuccess}
+      />
+    </>
   );
 };
 

@@ -68,11 +68,27 @@ const OrderHistoryPage = () => {
                         alt={item.productName}
                       />
                       <div className="product-details">
-                        <h2>{item.productName}</h2>
-                        <p>수량: {item.count}개</p>
-                        <p className="price">
-                          {item.orderPrice.toLocaleString()}원
-                        </p>
+                        <h2>
+                          {item.productName.split('|').map((part, index) => (
+                            <span
+                              key={index}
+                              className={index > 0 ? 'product-info-sub' : ''}
+                            >
+                              {part}
+                              {index <
+                                item.productName.split('|').length - 1 && (
+                                <br />
+                              )}
+                            </span>
+                          ))}
+                        </h2>
+                        <div className="product-purchase-info">
+                          <div className="quantity">수량: {item.count}개</div>
+                          <div className="price">
+                            <strong>{item.orderPrice.toLocaleString()}</strong>
+                            원
+                          </div>
+                        </div>
                       </div>
                     </div>
                   ))}
