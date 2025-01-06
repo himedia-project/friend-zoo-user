@@ -20,6 +20,13 @@ export const getNewItemProductList = async () => {
 };
 
 // mdPick
+// 상품 상세
+export const getProductById = async (productId) => {
+  const response = await axiosInstance.get(`${host}/detail/${productId}`);
+  return response.data;
+};
+
+// mdPick (멤버 DTO 오류로 요청 안됨)
 export const getMDPickItemProductList = async () => {
   const response = await axiosInstance.get(`${host}/list/mdPick`);
   return response.data;
@@ -37,14 +44,10 @@ export const getImageView = async (fileName) => {
   return response.data;
 };
 
-// 상품 상세
-export const getProductById = async (productId) => {
-  const response = await axiosInstance.get(`${host}/detail/${productId}`);
-  return response.data;
-};
-
 // 카테고리 조회
 export const getCategoryId = async (categoryId) => {
-  const response = await axiosInstance.get(`${host}/detail/category/${categoryId}`);
+  const response = await axiosInstance.get(
+    `${host}/detail/category/${categoryId}`,
+  );
   return response.data;
-}
+};

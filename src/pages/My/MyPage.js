@@ -109,40 +109,44 @@ const MyPage = () => {
           </div>
           {activeTab === 'product' && (
             <div className="tab-content">
-              {products.map((product) => (
-                <div className="product" key={product.id}>
-                  <div
-                    onClick={() => handleItemClick(product.id, 'product')}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <img
-                      src={
-                        `${API_SERVER_HOST}/api/product/view/${product.uploadFileNames[0]}` ||
-                        GoodsImg1
-                      }
-                      alt={product.name}
-                    />
-                    <div className="product-details">
-                      <h2>{product.name}</h2>
-                      <p>{product.description}</p>
-                      <p className="price">{product.price}원</p>
+              {products.length === 0 ? (
+                <div className="empty-message">찜한 상품이 없습니다.</div>
+              ) : (
+                products.map((product) => (
+                  <div className="product" key={product.id}>
+                    <div
+                      onClick={() => handleItemClick(product.id, 'product')}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <img
+                        src={
+                          `${API_SERVER_HOST}/api/product/view/${product.uploadFileNames[0]}` ||
+                          GoodsImg1
+                        }
+                        alt={product.name}
+                      />
+                      <div className="product-details">
+                        <h2>{product.name}</h2>
+                        <p>{product.description}</p>
+                        <p className="price">{product.price}원</p>
+                      </div>
+                    </div>
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleHeartClick(product.id, 'product');
+                      }}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {product.heart ? (
+                        <FavoriteIcon style={{ color: 'red' }} />
+                      ) : (
+                        <FavoriteOutlinedIcon />
+                      )}
                     </div>
                   </div>
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleHeartClick(product.id, 'product');
-                    }}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {product.heart ? (
-                      <FavoriteIcon style={{ color: 'red' }} />
-                    ) : (
-                      <FavoriteOutlinedIcon />
-                    )}
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           )}
           {/* {activeTab === 'content' && (

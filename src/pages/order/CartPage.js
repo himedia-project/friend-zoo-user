@@ -90,27 +90,35 @@ const CartPage = () => {
   return (
     <div className="cart-wrapper">
       <div className="cart">
-        <div className="cart-header">
-          <input
-            type="checkbox"
-            checked={items.every((item) => item.selected)}
-            onChange={() => {
-              const allSelected = items.every((item) => item.selected);
-              setItems(
-                items.map((item) => ({ ...item, selected: !allSelected })),
-              );
-            }}
-          />
-          <span>전체 선택</span>
-        </div>
-        {items.map((item) => (
-          <CartItem
-            key={item.id}
-            item={item}
-            onQuantityChange={handleQuantityChange}
-            onRemove={handleRemove}
-          />
-        ))}
+        {items.length === 0 ? (
+          <div className="empty-cart-message">
+            장바구니에 담은 상품이 없습니다.
+          </div>
+        ) : (
+          <>
+            <div className="cart-header">
+              <input
+                type="checkbox"
+                checked={items.every((item) => item.selected)}
+                onChange={() => {
+                  const allSelected = items.every((item) => item.selected);
+                  setItems(
+                    items.map((item) => ({ ...item, selected: !allSelected })),
+                  );
+                }}
+              />
+              <span>전체 선택</span>
+            </div>
+            {items.map((item) => (
+              <CartItem
+                key={item.id}
+                item={item}
+                onQuantityChange={handleQuantityChange}
+                onRemove={handleRemove}
+              />
+            ))}
+          </>
+        )}
       </div>
       <div className="order-summary">
         <h2>주문 예상 금액</h2>

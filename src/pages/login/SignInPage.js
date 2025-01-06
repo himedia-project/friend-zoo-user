@@ -12,7 +12,7 @@ const SignInPage = () => {
     password: '',
     confirmPassword: '',
     name: '',
-    contact: '',
+    phone: '',
   });
   const [alertModal, setAlertModal] = useState({
     open: false,
@@ -29,8 +29,28 @@ const SignInPage = () => {
     }));
   };
 
+  const validateCheck = () => {
+    const phoneRegex = /^010-\d{4}-\d{4}$/;
+
+    if (!phoneRegex.test(formData.phone)) {
+      setAlertModal({
+        open: true,
+        title: '입력 오류',
+        message: '전화번호는 010-XXXX-XXXX 형식으로 입력해주세요.',
+        isSuccess: false,
+      });
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateCheck()) {
+      return;
+    }
+
     try {
       await signupPost(
         formData.name,
