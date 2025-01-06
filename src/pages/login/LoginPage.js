@@ -5,6 +5,7 @@ import '../../css/LoginPage.css';
 import { login } from '../../redux/loginSlice';
 import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2'; // SweetAlert2 임포트
+import { getKakaoLoginLink } from '../../api/kakaoApi'; // 추가
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -51,6 +52,11 @@ const LoginPage = () => {
     }
   };
 
+  const handleKakaoLogin = () => {
+    const link = getKakaoLoginLink();
+    window.location.href = link;
+  };
+
   return (
     <div className="login-container">
       <h1>Login</h1>
@@ -58,7 +64,9 @@ const LoginPage = () => {
       <div className="social-login">
         <button className="google-btn">Google로 시작하기</button>
         <button className="naver-btn">네이버로 시작하기</button>
-        <button className="kakao-btn">카카오로 시작하기</button>
+        <button className="kakao-btn" onClick={handleKakaoLogin}>
+          카카오로 시작하기
+        </button>
       </div>
 
       <div className="or-section">

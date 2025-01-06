@@ -26,6 +26,7 @@ import PaymentPage from './pages/order/PaymentPage';
 import PayCompletePage from './pages/order/PayCompletePage';
 import NotFound from './components/common/NotFound';
 import SearchPage from './pages/search/SearchPage';
+import KakaoRedirectPage from './pages/login/KakaoRedirectPage';
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
         <Route path="/join" element={<JoinPage />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/member/kakao" element={<KakaoRedirectPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/heart" element={<MyPage />} />
         <Route path="/cart" element={<CartPage />} />
