@@ -15,6 +15,7 @@ import axiosInstance from '../../api/axiosInstance';
 import { useSelector } from 'react-redux';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import Swal from 'sweetalert2';
+import { postOrder } from '../../api/orderApi';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
@@ -167,6 +168,44 @@ const ProductDetailPage = () => {
     }
   };
 
+  const handlePurchase = async () => {
+    if (!requireAuth(email)) {
+      Swal.fire({
+        title: '로그인 필요',
+        text: '이 작업을 수행하려면 로그인이 필요합니다.',
+        icon: 'warning',
+        confirmButtonText: '로그인하기',
+      }).then(() => {
+        navigate('/login');
+      });
+      return;
+    }
+
+    try {
+      const orderItems = [
+        {
+          productId: parseInt(productId),
+          qty: 1,
+        },
+      ];
+
+      await postOrder({ cartItems: orderItems });
+      navigate('/payment', {
+        state: { orderItems: orderItems },
+      });
+    } catch (error) {
+      if (handleAuthError(error)) {
+        return;
+      }
+      Swal.fire({
+        title: '주문 실패',
+        text: '주문 처리 중 오류가 발생했습니다.',
+        icon: 'error',
+        confirmButtonText: '확인',
+      });
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>문제가 발생했습니다: {error.message}</div>;
 
@@ -233,7 +272,9 @@ const ProductDetailPage = () => {
               </p>
               <p>배송 안내: {product.deliveryInfo || '정보 없음'}</p>
               <div className="ButtonContainer">
-                <button className="ProductButton">구매하기</button>
+                <button className="ProductButton" onClick={handlePurchase}>
+                  구매하기
+                </button>
                 <button className="ProductButton" onClick={handleAddToCart}>
                   장바구니에 넣기
                 </button>
