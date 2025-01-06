@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import '../../css/CartPage.css';
 import CartItem from '../../components/cart/CartItem';
 import { getCartItems, postChangeCart } from '../../api/cartApi';
+import { useNavigate } from 'react-router-dom';
 
 const CartPage = () => {
   const [items, setItems] = useState([]);
+  const navigate = useNavigate();
 
   const fetchCartItems = async () => {
     const res = await getCartItems();
@@ -70,6 +72,21 @@ const CartPage = () => {
   const { itemTotal, shippingTotal, discountTotal } = calculateTotals();
   const totalAmount = itemTotal + shippingTotal - discountTotal;
 
+  const handlePurchase = () => {
+    const selectedItems = items.filter((item) => item.selected);
+    if (selectedItems.length === 0) {
+      alert('선택된 상품이 없습니다.');
+      return;
+    }
+
+    const orderItems = selectedItems.map((item) => ({
+      productId: item.productId,
+      qty: item.quantity,
+    }));
+
+    navigate('/payment', { state: { orderItems } });
+  };
+
   return (
     <div className="cart-wrapper">
       <div className="cart">
@@ -123,7 +140,9 @@ const CartPage = () => {
           <li>환불 시 쿠폰 및 포인트 사용에 제한이 있을 수 있습니다.</li>
           <li>도서산간 지역은 추가 배송비가 발생할 수 있습니다.</li>
         </ul>
-        <button className="purchase-button">구매하기 (총 1건)</button>
+        <button className="purchase-button" onClick={handlePurchase}>
+          구매하기 (총 {items.filter((item) => item.selected).length}건)
+        </button>
       </div>
     </div>
   );

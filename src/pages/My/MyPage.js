@@ -11,6 +11,7 @@ import GoodsImg2 from '../../img/goods2.jpg';
 import { API_SERVER_HOST } from '../../config/apiConfig';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteBorder';
+import { Link } from 'react-router-dom';
 
 const MyPage = () => {
   const [activeTab, setActiveTab] = useState('product');
@@ -60,21 +61,24 @@ const MyPage = () => {
         <div className="sidebar">
           <ul>
             <li>
-              <a href="">주문조회</a>
+              <Link to="/order/history" className="sidebar-link">
+                주문조회
+              </Link>
             </li>
             <li>
-              <a href="" style={{ fontWeight: 'bold', color: '#000' }}>
+              <Link to="/my" className="sidebar-link active">
                 찜목록
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="">주문조회</a>
+              <Link to="/my/edit" className="sidebar-link">
+                정보수정
+              </Link>
             </li>
             <li>
-              <a href="">정보수정</a>
-            </li>
-            <li>
-              <a href="">회원탈퇴</a>
+              <Link to="/my/withdraw" className="sidebar-link">
+                회원탈퇴
+              </Link>
             </li>
           </ul>
         </div>

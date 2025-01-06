@@ -17,12 +17,13 @@ import JoinPage from './pages/login/JoinPage';
 import LoginPage from './pages/login/LoginPage';
 
 import CartPage from './pages/order/CartPage';
-import OrderPage from './pages/order/OrderPage';
-import OrderCompletePage from './pages/order/OrderCompletePage';
 
 import ProductDetailPage from './pages/HomePage/ProductDetailPage';
 import SignInPage from './pages/login/SignInPage';
 import MyPage from './pages/My/MyPage';
+import OrderHistoryPage from './pages/order/OrderHistoryPage';
+import PaymentPage from './pages/order/PaymentPage';
+import PayCompletePage from './pages/order/PayCompletePage';
 
 function App() {
   return (
@@ -49,8 +50,9 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/heart" element={<MyPage />} />
         <Route path="/cart" element={<CartPage />} />
-        <Route path="/order" element={<OrderPage />} />
-        <Route path="/order/complete" element={<OrderCompletePage />} />
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/payment/complete" element={<PayCompletePage />} />
+        <Route path="/order/history" element={<OrderHistoryPage />} />
 
         <Route path="*" element={<div>404</div>} />
       </Routes>
