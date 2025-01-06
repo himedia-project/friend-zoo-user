@@ -12,6 +12,7 @@ import { API_SERVER_HOST } from '../../config/apiConfig';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteBorder';
 import { Link, useNavigate } from 'react-router-dom';
+import MySidebar from '../../components/common/MySidebar';
 
 const MyPage = () => {
   const [activeTab, setActiveTab] = useState('product');
@@ -68,30 +69,7 @@ const MyPage = () => {
     <div className="goods-wrap">
       <h2>찜목록</h2>
       <div className="goods-containter">
-        <div className="sidebar">
-          <ul>
-            <li>
-              <Link to="/order/history" className="sidebar-link">
-                주문조회
-              </Link>
-            </li>
-            <li>
-              <Link to="/my" className="sidebar-link active">
-                찜목록
-              </Link>
-            </li>
-            <li>
-              <Link to="/my/edit" className="sidebar-link">
-                정보수정
-              </Link>
-            </li>
-            <li>
-              <Link to="/my/withdraw" className="sidebar-link">
-                회원탈퇴
-              </Link>
-            </li>
-          </ul>
-        </div>
+        <MySidebar />
         <div className="shopping-cart-container">
           <div className="tabs">
             <button
