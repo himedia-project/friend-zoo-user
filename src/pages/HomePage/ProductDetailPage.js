@@ -14,6 +14,7 @@ import { API_SERVER_HOST } from '../../config/apiConfig';
 import axiosInstance from '../../api/axiosInstance';
 import { useSelector } from 'react-redux';
 import useCustomLogin from '../../hooks/useCustomLogin';
+import Swal from 'sweetalert2';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
@@ -82,6 +83,14 @@ const ProductDetailPage = () => {
   const handleAddToCart = async () => {
     console.log('email', email);
     if (!requireAuth(email)) {
+      Swal.fire({
+        title: '로그인 필요',
+        text: '이 작업을 수행하려면 로그인이 필요합니다.',
+        icon: 'warning',
+        confirmButtonText: '로그인하기',
+      }).then(() => {
+        navigate('/login');
+      });
       return;
     }
 
