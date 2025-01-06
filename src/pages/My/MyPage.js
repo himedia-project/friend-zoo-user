@@ -16,7 +16,7 @@ import { Link, useNavigate } from 'react-router-dom';
 const MyPage = () => {
   const [activeTab, setActiveTab] = useState('product');
   const [products, setProducts] = useState([]);
-  const [contents, setContents] = useState([]);
+  // const [contents, setContents] = useState([]);
 
   const navigate = useNavigate();
 
@@ -100,12 +100,12 @@ const MyPage = () => {
             >
               상품
             </button>
-            <button
+            {/* <button
               className={activeTab === 'content' ? 'active' : ''}
               onClick={() => handleTabClick('content')}
             >
               컨텐츠
-            </button>
+            </button> */}
           </div>
           {activeTab === 'product' && (
             <div className="tab-content">
@@ -145,7 +145,7 @@ const MyPage = () => {
               ))}
             </div>
           )}
-          {activeTab === 'content' && (
+          {/* {activeTab === 'content' && (
             <div className="tab-content">
               {contents.map((content) => (
                 <div className="product" key={content.id}>
@@ -183,7 +183,7 @@ const MyPage = () => {
                 </div>
               ))}
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>
