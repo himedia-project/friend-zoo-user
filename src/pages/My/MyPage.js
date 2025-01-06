@@ -27,11 +27,11 @@ const MyPage = () => {
   const loadHeartLists = async () => {
     try {
       const productList = await getHeartProducts();
-      const contentList = await getHeartContents();
+      // const contentList = await getHeartContents();
       console.log('productList: ', productList);
       setProducts(productList);
-      console.log('contentList: ', contentList);
-      setContents(contentList);
+      // console.log('contentList: ', contentList);
+      // setContents(contentList);
     } catch (error) {
       console.error('Failed to load heart lists:', error);
     }
