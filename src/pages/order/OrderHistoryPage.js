@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { getOrderList } from '../../api/orderApi';
+import { getOrderList, cancelOrder } from '../../api/orderApi';
 import '../../css/OrderPage.css';
 import MySidebar from '../../components/common/MySidebar';
+import Swal from 'sweetalert2';
 
 import { API_SERVER_HOST } from '../../config/apiConfig';
 
@@ -13,6 +14,40 @@ const OrderHistoryPage = () => {
 
   const handleItemClick = (productId) => {
     navigate(`/product/${productId}`);
+  };
+
+  const handleCancelOrder = async (orderId) => {
+    const result = await Swal.fire({
+      title: '주문 취소',
+      text: '주문을 취소하시겠습니까?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '확인',
+      cancelButtonText: '취소',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await cancelOrder(orderId);
+        const updatedData = await getOrderList();
+        setOrderHistory(updatedData);
+
+        Swal.fire({
+          title: '취소 완료',
+          text: '주문이 취소되었습니다.',
+          icon: 'success',
+          confirmButtonText: '확인',
+        });
+      } catch (error) {
+        console.error('주문 취소 실패:', error);
+        Swal.fire({
+          title: '취소 실패',
+          text: '주문 취소에 실패했습니다.',
+          icon: 'error',
+          confirmButtonText: '확인',
+        });
+      }
+    }
   };
 
   useEffect(() => {
@@ -50,6 +85,17 @@ const OrderHistoryPage = () => {
                     >
                       {order.orderStatus === 'ORDER' ? '주문중' : '취소'}
                     </span>
+                    {order.orderStatus === 'ORDER' && (
+                      <button
+                        className="cancel-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCancelOrder(order.orderId);
+                        }}
+                      >
+                        주문취소
+                      </button>
+                    )}
                   </div>
                   <div className="order-total">
                     <strong>{order.totalPrice.toLocaleString()}원</strong>

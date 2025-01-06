@@ -146,3 +146,17 @@
 .product-purchase-info .price strong {
   font-weight: 600;
 }
+
+.cancel-button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background-color: #cc0000;
+}

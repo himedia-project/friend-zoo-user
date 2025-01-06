@@ -13,6 +13,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteBorder';
 import { Link, useNavigate } from 'react-router-dom';
 import MySidebar from '../../components/common/MySidebar';
+import Swal from 'sweetalert2';
 
 const MyPage = () => {
   const [activeTab, setActiveTab] = useState('product');
@@ -40,6 +41,24 @@ const MyPage = () => {
 
   const handleHeartClick = async (id, type) => {
     try {
+      // 좋아요가 이미 되어있는 상품인 경우
+      const product = products.find((p) => p.id === id);
+      if (product?.heart) {
+        const result = await Swal.fire({
+          title: '찜 취소',
+          text: '찜 목록에서 삭제하시겠습니까?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: '확인',
+          cancelButtonText: '취소',
+        });
+
+        if (!result.isConfirmed) {
+          return; // 취소를 눌렀을 경우 함수 종료
+        }
+      }
+
+      // 좋아요 변경 처리
       if (type === 'product') {
         await changeHeartProduct(id);
         console.log('좋아요 변경 완료');

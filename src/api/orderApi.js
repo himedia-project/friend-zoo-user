@@ -17,6 +17,6 @@ export const postOrder = async (order) => {
 
 // 주문 취소
 export const cancelOrder = async (orderId) => {
-  const res = await axiosInstance.delete(`${host}/cancel/${orderId}`);
+  const res = await axiosInstance.post(`${host}/${orderId}/cancel`);
   return res.data;
 };
