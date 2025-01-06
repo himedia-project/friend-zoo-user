@@ -43,16 +43,17 @@ const useCustomLogin = () => {
 
   // 로그인 필요 처리
   const requireAuth = (email) => {
-    if (!email) {
+    if (!email || email === '') {
       setAlertModal({
         open: true,
         title: '로그인 필요',
-        message: '로그인을 하셔야 합니다.',
+        message: '로그인이 필요한 서비스입니다.',
         isSuccess: false,
         onSuccess: () => {
           navigate('/login');
         },
       });
+
       return false;
     }
     return true;

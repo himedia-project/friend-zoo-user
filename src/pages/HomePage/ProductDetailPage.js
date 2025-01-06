@@ -12,6 +12,8 @@ import AlertModal from '../../components/common/AlertModal';
 import ConfirmModal from '../../components/common/ConfirmModal';
 import { API_SERVER_HOST } from '../../config/apiConfig';
 import axiosInstance from '../../api/axiosInstance';
+import { useSelector } from 'react-redux';
+import useCustomLogin from '../../hooks/useCustomLogin';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
@@ -20,9 +22,21 @@ const ProductDetailPage = () => {
   const [products, setProducts] = useState({ best: [], new: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [alertModal, setAlertModal] = useState({ open: false, title: '', message: '', isSuccess: true });
-  const [confirmModal, setConfirmModal] = useState({ open: false, title: '', message: '', isSuccess: true });
+  const [alertModal, setAlertModal] = useState({
+    open: false,
+    title: '',
+    message: '',
+    isSuccess: true,
+  });
+  const [confirmModal, setConfirmModal] = useState({
+    open: false,
+    title: '',
+    message: '',
+    isSuccess: true,
+  });
   const [isFavorited, setIsFavorited] = useState(false);
+  const { email } = useSelector((state) => state.loginSlice);
+  const { requireAuth, handleAuthError } = useCustomLogin();
 
   useEffect(() => {
     fetchProductDetail();
@@ -36,7 +50,9 @@ const ProductDetailPage = () => {
 
   const fetchProductDetail = async () => {
     try {
-      const response = await fetch(`${API_SERVER_HOST}/api/product/detail/${productId}`);
+      const response = await fetch(
+        `${API_SERVER_HOST}/api/product/detail/${productId}`,
+      );
       const data = await response.json();
       const productData = {
         ...data,
@@ -63,14 +79,41 @@ const ProductDetailPage = () => {
     }
   };
 
-  const handleAddToCart = () => {
-    postChangeCart({ productId: productId, qty: 1 });
-    setAlertModal({ open: true, title: '장바구니 담기 성공', message: '상품이 장바구니에 담겼습니다.', isSuccess: true });
+  const handleAddToCart = async () => {
+    console.log('email', email);
+    if (!requireAuth(email)) {
+      return;
+    }
+
+    try {
+      await postChangeCart({ productId: productId, qty: 1 });
+      setAlertModal({
+        open: true,
+        title: '장바구니 담기 성공',
+        message: '상품이 장바구니에 담겼습니다.',
+        isSuccess: true,
+      });
+    } catch (error) {
+      if (handleAuthError(error)) {
+        return;
+      }
+      setAlertModal({
+        open: true,
+        title: '장바구니 담기 실패',
+        message: '상품을 장바구니에 담는데 실패했습니다.',
+        isSuccess: false,
+      });
+    }
   };
 
   const handleAlertClose = () => {
     setAlertModal({ ...alertModal, open: false });
-    setConfirmModal({ open: true, title: '장바구니로 이동', message: '장바구니 페이지로 이동하시겠습니까?', isSuccess: true });
+    setConfirmModal({
+      open: true,
+      title: '장바구니로 이동',
+      message: '장바구니 페이지로 이동하시겠습니까?',
+      isSuccess: true,
+    });
   };
 
   const handleConfirmClose = () => {
@@ -84,18 +127,34 @@ const ProductDetailPage = () => {
 
   const handleHeartClick = async () => {
     try {
-      const response = await axiosInstance.post(`/heart/product/${productId}`, {}, {
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await axiosInstance.post(
+        `/heart/product/${productId}`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      });
+      );
 
       setIsFavorited(!isFavorited);
-      const message = !isFavorited ? '상품이 찜 목록에 추가되었습니다.' : '상품이 찜 목록에서 제거되었습니다.';
-      setAlertModal({ open: true, title: !isFavorited ? '찜하기 성공' : '찜하기 해제', message, isSuccess: true });
+      const message = !isFavorited
+        ? '상품이 찜 목록에 추가되었습니다.'
+        : '상품이 찜 목록에서 제거되었습니다.';
+      setAlertModal({
+        open: true,
+        title: !isFavorited ? '찜하기 성공' : '찜하기 해제',
+        message,
+        isSuccess: true,
+      });
     } catch (error) {
       console.error('찜하기 실패:', error);
-      setAlertModal({ open: true, title: '찜하기 실패', message: '상품을 찜하는 데 실패했습니다.', isSuccess: false });
+      setAlertModal({
+        open: true,
+        title: '찜하기 실패',
+        message: '상품을 찜하는 데 실패했습니다.',
+        isSuccess: false,
+      });
     }
   };
 
@@ -120,8 +179,16 @@ const ProductDetailPage = () => {
               alt={product.title}
               className="ProductPhoto"
             />
-            {/* 하트 아이콘 추가 */}
-            <span onClick={handleHeartClick} style={{ cursor: 'pointer', position: 'absolute', bottom: 10, right: 10, zIndex: 1 }}>
+            <span
+              onClick={handleHeartClick}
+              style={{
+                cursor: 'pointer',
+                position: 'absolute',
+                bottom: 10,
+                right: 10,
+                zIndex: 1,
+              }}
+            >
               {isFavorited ? (
                 <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
               ) : (
@@ -135,9 +202,12 @@ const ProductDetailPage = () => {
               {Array.from({ length: 5 }, (_, index) => (
                 <StarOutlinedIcon
                   key={index}
-                  style={{ color: index < product.rating ? 'orange' : 'lightgray' }}
+                  style={{
+                    color: index < product.rating ? 'orange' : 'lightgray',
+                  }}
                 />
-              ))} {product.reviewsCount}개 구매평
+              ))}{' '}
+              {product.reviewsCount}개 구매평
             </p>
             <p>
               가격: {product.price.toLocaleString()}원
@@ -149,8 +219,8 @@ const ProductDetailPage = () => {
               <p>배송 방법: {product.shippingMethod}</p>
               <p>
                 배송비: {(product.shippingCost || 0).toLocaleString()}원 (
-                {(product.freeShippingThreshold || 0).toLocaleString()}원 이상 무료배송)
-                | 도서산간 배송비 추가
+                {(product.freeShippingThreshold || 0).toLocaleString()}원 이상
+                무료배송) | 도서산간 배송비 추가
               </p>
               <p>배송 안내: {product.deliveryInfo || '정보 없음'}</p>
               <div className="ButtonContainer">
@@ -164,8 +234,21 @@ const ProductDetailPage = () => {
         </div>
       )}
 
-      <AlertModal open={alertModal.open} onClose={handleAlertClose} title={alertModal.title} message={alertModal.message} isSuccess={alertModal.isSuccess} />
-      <ConfirmModal open={confirmModal.open} onClose={handleConfirmClose} title={confirmModal.title} message={confirmModal.message} isSuccess={confirmModal.isSuccess} onConfirm={handleConfirm} />
+      <AlertModal
+        open={alertModal.open}
+        onClose={handleAlertClose}
+        title={alertModal.title}
+        message={alertModal.message}
+        isSuccess={alertModal.isSuccess}
+      />
+      <ConfirmModal
+        open={confirmModal.open}
+        onClose={handleConfirmClose}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        isSuccess={confirmModal.isSuccess}
+        onConfirm={handleConfirm}
+      />
     </div>
   );
 };
