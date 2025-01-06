@@ -28,7 +28,7 @@ function PickPage() {
     return (
         // API 호출이 안되서 memberDTO 오류 해결되면 바꿔주기
         // 현재는 best item으로 임시 호출중이며 추가되는대로 위에 useEffect도 수정해야함.
-        <ItemListGrid title="🌞 특별상품 🔰" items={products.best}/>
+        <ItemListGrid title="❤️ MD'S Pick 🔰" items={products.best}/>
     )
 }
 

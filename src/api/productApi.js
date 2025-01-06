@@ -4,11 +4,12 @@ import axiosInstance from './axiosInstance';
 
 import { API_SERVER_HOST } from '../config/apiConfig';
 
+const host1 = `${API_SERVER_HOST}/api`;
 const host = `${API_SERVER_HOST}/api/product`;
 
 // 베스트
 export const getBestItemProductList = async () => {
-  const response = await axiosInstance.get(`${host}/list?best=Y`);
+  const response = await axiosInstance.get(`${host}/list/best`);
   return response.data;
 };
 
@@ -18,9 +19,15 @@ export const getNewItemProductList = async () => {
   return response.data;
 };
 
-// mdPick (멤버 DTO 오류로 요청 안됨)
+// mdPick
 export const getMDPickItemProductList = async () => {
-  const response = await axiosInstance.get(`${host}/list?mdPick=Y`);
+  const response = await axiosInstance.get(`${host}/list/mdPick`);
+  return response.data;
+};
+
+// style
+export const getStyleItemProductList = async () => {
+  const response = await axiosInstance.get(`${host1}/content/list`);
   return response.data;
 };
 
