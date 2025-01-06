@@ -79,9 +79,9 @@ function Header() {
               <li>
                 <Link to="/">Home</Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to="/style">Style</Link>
-              </li>
+              </li> */}
             </ul>
           </nav>
           <Link to="/search">
