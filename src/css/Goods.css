@@ -52,6 +52,7 @@ body {
   height: 200px;
   width: 100%;
   box-sizing: border-box;
+  position: relative;
 }
 
 .product img {
@@ -164,4 +165,11 @@ a {
   color: #000;
   font-weight: bold;
   background-color: #f0f0f0;
+}
+
+.product > div:last-child {
+  position: absolute;
+  top: 50%;
+  right: 70px;
+  transform: translateY(-50%);
 }

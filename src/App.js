@@ -24,6 +24,7 @@ import MyPage from './pages/My/MyPage';
 import OrderHistoryPage from './pages/order/OrderHistoryPage';
 import PaymentPage from './pages/order/PaymentPage';
 import PayCompletePage from './pages/order/PayCompletePage';
+import NotFound from './components/common/NotFound';
 
 function App() {
   return (
@@ -41,7 +42,7 @@ function App() {
         <Route path="/pick" element={<PickPage />} />
 
         {/*메인*/}
-        <Route path="/category/:categoryName" element={<CategoryPage />} />
+        <Route path="/category/:categoryId" element={<CategoryPage />} />
         <Route path="/product/:productId" element={<ProductDetailPage />} />
 
         {/*우측*/}
@@ -54,7 +55,7 @@ function App() {
         <Route path="/payment/complete" element={<PayCompletePage />} />
         <Route path="/order/history" element={<OrderHistoryPage />} />
 
-        <Route path="*" element={<div>404</div>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Kakao />

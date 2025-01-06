@@ -9,7 +9,7 @@ import GoodsImg1 from '../../img/goods.jpg';
 
 const StyleList = ({ title, items }) => {
   // items가 비어있거나 undefined일 경우 메시지 출력
-  if (!items || items.length === 0) return <div>상품이 없습니다.</div>;
+  if (!items || items.length === 0) return;
 
   return (
     <div className="ItemList">
@@ -52,7 +52,7 @@ const StyleList = ({ title, items }) => {
           <SwiperSlide key={item.id}>
             <div className="SlickBox">
               <Link to={`/product/${item.id}`}>
-                <div className="SlickImageContainer">
+                <div className="StyleImageContainer">
                   <img
                     src={
                       item.uploadFileNames && item.uploadFileNames.length > 0

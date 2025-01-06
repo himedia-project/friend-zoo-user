@@ -10,6 +10,10 @@ const OrderHistoryPage = () => {
   const navigate = useNavigate();
   const [orderHistory, setOrderHistory] = useState({ dtoList: [] });
 
+  const handleItemClick = (productId) => {
+    navigate(`/product/${productId}`);
+  };
+
   useEffect(() => {
     const fetchOrderHistory = async () => {
       try {
@@ -38,7 +42,7 @@ const OrderHistoryPage = () => {
                 <span
                   className={`order-status ${order.orderStatus.toLowerCase()}`}
                 >
-                  {order.orderStatus}
+                  {order.orderStatus === 'ORDER' ? '주문중' : '취소'}
                 </span>
               </div>
               <div className="order-total">
@@ -47,7 +51,12 @@ const OrderHistoryPage = () => {
             </div>
             <div className="order-items">
               {order.orderItems.map((item, index) => (
-                <div key={index} className="product">
+                <div
+                  key={index}
+                  className="product"
+                  onClick={() => handleItemClick(item.productId)}
+                  style={{ cursor: 'pointer' }}
+                >
                   <img
                     src={`${API_SERVER_HOST}/api/product/view/${item.imgUrl}`}
                     alt={item.productName}

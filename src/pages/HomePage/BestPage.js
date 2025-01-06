@@ -1,10 +1,15 @@
 import React, {useEffect, useState} from "react";
 import ItemListGrid from "../../components/post/ItemListGrid";
-import {getBestItemProductList, getNewItemProductList} from "../../api/productApi";
+import {
+    getBestItemProductList,
+    getMDPickItemProductList,
+    getNewItemProductList,
+    getStyleItemProductList,
+} from '../../api/productApi';
 
 function BestPage() {
 
-    const [products, setProducts] = useState({ best: [], new: [], mdpick: [] });
+    const [products, setProducts] = useState({ best: [] });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -15,8 +20,8 @@ function BestPage() {
     const fetchProducts = async () => {
         try {
             const bestProducts = await getBestItemProductList();
-            const newProducts = await getNewItemProductList();
-            setProducts({ best: bestProducts, new: newProducts, mdpick: [] });
+
+            setProducts({ best: bestProducts });
         } catch (error) {
             console.error('상품 목록 로딩 실패:', error);
             setError(error);

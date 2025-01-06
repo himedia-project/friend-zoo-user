@@ -15,15 +15,15 @@ function CategoryButton() {
     const navigate = useNavigate(); // useNavigate 훅 사용
 
     const categories = [
-        { name: '강아지', url: 'dog', image: dogImage },
-        { name: '고양이', url: 'cat', image: catImage },
-        { name: '쿼카', url: 'qukka', image: qukkaImage },
-        { name: '악어', url: 'crocodile', image: crocodileImage },
-        { name: '라이언', url: 'ryan', image: lionImage },
-        { name: '토끼', url: 'rabbit', image: rabbitImage },
-        { name: '거북이', url: 'turtle', image: turtleImage },
-        { name: '다람쥐', url: 'squirrel', image: squirrelImage },
-        { name: '수달', url: 'otter', image: otterImage }
+        { name: '강아지', url: '2', image: dogImage },
+        // { name: '고양이', url: '고양이', image: catImage },
+        { name: '쿼카', url: '1', image: qukkaImage },
+        { name: '악어', url: '3', image: crocodileImage },
+        { name: '라이언', url: '4', image: lionImage },
+        { name: '토끼', url: '5', image: rabbitImage },
+        { name: '거북이', url: '6', image: turtleImage },
+        { name: '다람쥐', url: '7', image: squirrelImage },
+        { name: '해달', url: '8', image: otterImage }
     ];
 
     return (

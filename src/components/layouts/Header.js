@@ -11,17 +11,20 @@ import { logoutPost } from '../../api/loginApi';
 import { logout } from '../../redux/loginSlice';
 import AlertModal from '../common/AlertModal';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
+import useCustomLogin from '../../hooks/useCustomLogin';
 
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { email } = useSelector((state) => state.loginSlice);
-  const [alertModal, setAlertModal] = useState({
-    open: false,
-    title: '',
-    message: '',
-    isSuccess: false,
-  });
+  const { alertModal, setAlertModal, handleAuthError, requireAuth } =
+    useCustomLogin();
+
+  const handleProtectedAction = (path) => {
+    if (requireAuth(email)) {
+      navigate(path);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -37,13 +40,14 @@ function Header() {
         },
       });
     } catch (error) {
-      console.error('로그아웃 실패:', error);
-      setAlertModal({
-        open: true,
-        title: '로그아웃 실패',
-        message: '로그아웃에 실패했습니다.',
-        isSuccess: false,
-      });
+      if (!handleAuthError(error)) {
+        setAlertModal({
+          open: true,
+          title: '로그아웃 실패',
+          message: '로그아웃에 실패했습니다.',
+          isSuccess: false,
+        });
+      }
     }
   };
 
@@ -85,16 +89,18 @@ function Header() {
               <SearchIcon />
             </button>
           </Link>
-          <Link to="/heart">
-            <button className="icon">
-              <FavoriteOutlinedIcon />
-            </button>
-          </Link>
-          <Link to="/cart">
-            <button className="icon">
-              <LocalGroceryStoreOutlinedIcon />
-            </button>
-          </Link>
+          <button
+            className="icon"
+            onClick={() => handleProtectedAction('/heart')}
+          >
+            <FavoriteOutlinedIcon />
+          </button>
+          <button
+            className="icon"
+            onClick={() => handleProtectedAction('/cart')}
+          >
+            <LocalGroceryStoreOutlinedIcon />
+          </button>
           {email ? (
             <button className="icon" onClick={handleLogout}>
               <AccountCircleIcon />

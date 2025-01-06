@@ -11,12 +11,14 @@ import GoodsImg2 from '../../img/goods2.jpg';
 import { API_SERVER_HOST } from '../../config/apiConfig';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteBorder';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const MyPage = () => {
   const [activeTab, setActiveTab] = useState('product');
   const [products, setProducts] = useState([]);
-  const [contents, setContents] = useState([]);
+  // const [contents, setContents] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadHeartLists();
@@ -25,11 +27,11 @@ const MyPage = () => {
   const loadHeartLists = async () => {
     try {
       const productList = await getHeartProducts();
-      const contentList = await getHeartContents();
+      // const contentList = await getHeartContents();
       console.log('productList: ', productList);
       setProducts(productList);
-      console.log('contentList: ', contentList);
-      setContents(contentList);
+      // console.log('contentList: ', contentList);
+      // setContents(contentList);
     } catch (error) {
       console.error('Failed to load heart lists:', error);
     }
@@ -52,6 +54,14 @@ const MyPage = () => {
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+  };
+
+  const handleItemClick = (id, type) => {
+    if (type === 'product') {
+      navigate(`/product/${id}`);
+    } else {
+      navigate(`/content/${id}`);
+    }
   };
 
   return (
@@ -90,70 +100,90 @@ const MyPage = () => {
             >
               상품
             </button>
-            <button
+            {/* <button
               className={activeTab === 'content' ? 'active' : ''}
               onClick={() => handleTabClick('content')}
             >
               컨텐츠
-            </button>
+            </button> */}
           </div>
           {activeTab === 'product' && (
             <div className="tab-content">
               {products.map((product) => (
                 <div className="product" key={product.id}>
-                  <img
-                    src={
-                      `${API_SERVER_HOST}/api/product/view/${product.uploadFileNames[0]}` ||
-                      GoodsImg1
-                    }
-                    alt={product.name}
-                  />
-                  <div className="product-details">
-                    <h2>{product.name}</h2>
-                    <p>{product.description}</p>
-                    <p className="price">{product.price}원</p>
-                    <div
-                      onClick={() => handleHeartClick(product.id, 'product')}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      {product.heart ? (
-                        <FavoriteIcon style={{ color: 'red' }} />
-                      ) : (
-                        <FavoriteOutlinedIcon />
-                      )}
+                  <div
+                    onClick={() => handleItemClick(product.id, 'product')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <img
+                      src={
+                        `${API_SERVER_HOST}/api/product/view/${product.uploadFileNames[0]}` ||
+                        GoodsImg1
+                      }
+                      alt={product.name}
+                    />
+                    <div className="product-details">
+                      <h2>{product.name}</h2>
+                      <p>{product.description}</p>
+                      <p className="price">{product.price}원</p>
                     </div>
+                  </div>
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleHeartClick(product.id, 'product');
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {product.heart ? (
+                      <FavoriteIcon style={{ color: 'red' }} />
+                    ) : (
+                      <FavoriteOutlinedIcon />
+                    )}
                   </div>
                 </div>
               ))}
             </div>
           )}
-          {activeTab === 'content' && (
+          {/* {activeTab === 'content' && (
             <div className="tab-content">
               {contents.map((content) => (
                 <div className="product" key={content.id}>
-                  <img
-                    src={
-                      content.uploadFileNames && content.uploadFileNames[0]
-                        ? `${API_SERVER_HOST}/api/content/view/${content.uploadFileNames[0]}`
-                        : GoodsImg2
-                    }
-                    alt={content.title}
-                  />
-                  <div className="product-details">
-                    <h2>{content.title}</h2>
-                    <p>{content.description}</p>
-                    <p className="price">{content.price}원</p>
-                    <button
-                      className="edit-button"
-                      onClick={() => handleHeartClick(content.id, 'content')}
-                    >
-                      찜하기
-                    </button>
+                  <div
+                    onClick={() => handleItemClick(content.id, 'content')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <img
+                      src={
+                        content.uploadFileNames && content.uploadFileNames[0]
+                          ? `${API_SERVER_HOST}/api/content/view/${content.uploadFileNames[0]}`
+                          : GoodsImg2
+                      }
+                      alt={content.title}
+                    />
+                    <div className="product-details">
+                      <h2>{content.title}</h2>
+                      <p>{content.description}</p>
+                      <p className="price">{content.price}원</p>
+                    </div>
+                  </div>
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleHeartClick(content.id, 'content');
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {content.heart ? (
+                      <FavoriteIcon style={{ color: 'red' }} />
+                    ) : (
+                      <FavoriteOutlinedIcon />
+                    )}
                   </div>
                 </div>
               ))}
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>
