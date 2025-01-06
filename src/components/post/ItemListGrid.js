@@ -4,6 +4,8 @@ import "swiper/swiper-bundle.css";
 import '../../css/ItemListGrid.css';
 import { Autoplay, Navigation, Pagination, Grid } from "swiper/modules";
 import { Link } from "react-router-dom";
+import { API_SERVER_HOST } from '../../config/apiConfig';
+import GoodsImg1 from '../../img/goods.jpg';
 
 const ItemListGrid = ({ title, items }) => {
     if (!items || items.length === 0) return;
@@ -58,39 +60,42 @@ const ItemListGrid = ({ title, items }) => {
                     <SwiperSlide key={item.id}>
                         <div className="SwiperGridBox">
                             <Link to={`/product/${item.id}`}>
-                                <div className="SwiperGridImageContainer">
-                                    <img
-                                        src={"https://cdn.imweb.me/thumbnail/20241125/d781269838648.jpg"}
-                                        alt={item.name}
-                                        className="SwiperGridImage"
-                                    />
-                                    <div className="SwiperGridOverlay">
-                                        <div>
-                                            {item.name.split('|').map((part, index) => {
-                                                const isKorean = /[가-힣]/.test(part);
-                                                if (isKorean) {
-                                                    const lines = part.match(/.{1,26}/g);
-                                                    return (
-                                                        <span key={index} className={index > 0 ? 'SwiperGridImageInfoContainer' : ''}>
+                              <div className="SwiperGridImageContainer">
+                                <img
+                                  src={
+                                    `${API_SERVER_HOST}/api/product/view/${item.uploadFileNames[0]}` ||
+                                    GoodsImg1
+                                  }
+                                  alt={item.name}
+                                  className="SwiperGridImage"
+                                />
+                                <div className="SwiperGridOverlay">
+                                  <div>
+                                    {item.name.split('|').map((part, index) => {
+                                      const isKorean = /[가-힣]/.test(part);
+                                      if (isKorean) {
+                                        const lines = part.match(/.{1,26}/g);
+                                        return (
+                                          <span key={index} className={index > 0 ? 'SwiperGridImageInfoContainer' : ''}>
                                                             {lines.map((line, lineIndex) => (
-                                                                <span key={lineIndex}>{line}<br /></span>
+                                                              <span key={lineIndex}>{line}<br /></span>
                                                             ))}
                                                         </span>
-                                                    );
-                                                }
-                                                return null;
-                                            })}
-                                            <hr />
-                                            <span className='SwiperGridImageInfoPrice'>{item.price.toLocaleString()}원</span>
-                                        </div>
-                                    </div>
+                                        );
+                                      }
+                                      return null;
+                                    })}
+                                    <hr />
+                                    <span className="SwiperGridImageInfoPrice">{item.price.toLocaleString()}원</span>
+                                  </div>
                                 </div>
+                              </div>
                             </Link>
 
-                            <div className="SwiperGridInfoContainer">
-                                <h3 className="SwiperGridInfoTitle">
-                                    {item.name.split('|').map((part, index) => (
-                                        <span key={index} className={index > 0 ? 'SwiperGridInfoSubText' : ''}>
+                          <div className="SwiperGridInfoContainer">
+                            <h3 className="SwiperGridInfoTitle">
+                              {item.name.split('|').map((part, index) => (
+                                <span key={index} className={index > 0 ? 'SwiperGridInfoSubText' : ''}>
                                             {part}
                                             {index < item.name.split('|').length - 1 && <br />}
                                         </span>

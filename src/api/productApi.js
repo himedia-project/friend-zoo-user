@@ -42,3 +42,9 @@ export const getProductById = async (productId) => {
   const response = await axiosInstance.get(`${host}/detail/${productId}`);
   return response.data;
 };
+
+// 카테고리 조회
+export const getCategoryId = async (categoryId) => {
+  const response = await axiosInstance.get(`${host}/detail/category/${categoryId}`);
+  return response.data;
+}

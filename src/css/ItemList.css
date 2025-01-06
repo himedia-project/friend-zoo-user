@@ -36,6 +36,8 @@
     width: 300px;
     height: 300px;
 
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.01), 3px 3px 6px rgba(0, 0, 0, 0.1);
+
     /*사진정렬*/
     margin: auto;
 }

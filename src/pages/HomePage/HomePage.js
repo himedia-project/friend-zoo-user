@@ -12,6 +12,7 @@ import {
 
 import '../../App.css';
 import StyleItemList from '../../components/post/StyleItemList';
+import SubSlider from '../../components/post/SubSlider';
 
 const HomePage = () => {
     const [products, setProducts] = useState({ best: [], new: [], mdpick: [], style: [] });
@@ -48,7 +49,7 @@ const HomePage = () => {
           <ItemList title="🐶 추천픽 상품 📌" items={products.mdpick} />
           <hr />
           <br />
-          <SliderComponent />
+          <SubSlider />
           <hr />
           <br />
           <ItemList title="🧸 신규 상품 🧩️" items={products.new} />

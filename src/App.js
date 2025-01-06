@@ -42,7 +42,7 @@ function App() {
         <Route path="/pick" element={<PickPage />} />
 
         {/*메인*/}
-        <Route path="/category/:categoryName" element={<CategoryPage />} />
+        <Route path="/category/:categoryId" element={<CategoryPage />} />
         <Route path="/product/:productId" element={<ProductDetailPage />} />
 
         {/*우측*/}
