@@ -9,7 +9,7 @@
     /*border: 1px solid black;*/
     /* 사이즈에 맞게 자동으로 줄여줌 */
     width: fit-content;
-    margin: 30px 0 30px 50px;
+    margin: 30px 0 30px 0;
 }
 
 .SwiperGridBox {
@@ -20,7 +20,7 @@
 }
 
 .SwiperGridBox:hover .SwiperGridOverlay {
-    opacity: 1; /* 마우스를 올렸을 때 보이도록 */
+    opacity: 1;
 }
 
 /*.swiper-slide {*/

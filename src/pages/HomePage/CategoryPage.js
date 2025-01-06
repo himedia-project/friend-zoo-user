@@ -20,8 +20,9 @@ const CategoryPage = () => {
     const { categoryName } = useParams();
 
     const [checkedItems, setCheckedItems] = useState({
-        ItemList: false,
-        Dog: false,
+        'Best 상품': false,
+        'New 상품': false,
+        'MD Pick 상품': false,
     });
 
     const handleChange = (event) => {
@@ -41,7 +42,6 @@ const CategoryPage = () => {
             <h1>{categoryTitles[categoryName] || "카테고리"}</h1>
             <CategoryButton />
 
-            {/* 체크박스들 */}
             {Object.keys(checkedItems).map(item => (
                 <FormControlLabel
                     key={item}
@@ -58,7 +58,6 @@ const CategoryPage = () => {
                 />
             ))}
 
-            {/* 체크된 항목에 따라 컴포넌트 표시 */}
             {Object.keys(checkedItems).map(item => (
                 checkedItems[item] && itemComponents[item]
             ))}

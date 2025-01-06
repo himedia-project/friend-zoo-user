@@ -4,8 +4,7 @@ import '../../css/Header.css';
 
 import SearchIcon from '@mui/icons-material/Search';
 import LocalGroceryStoreOutlinedIcon from '@mui/icons-material/LocalGroceryStoreOutlined';
-import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import logo from '../../img/logo.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutPost } from '../../api/loginApi';
@@ -64,9 +63,6 @@ function Header() {
                 <Link to="/new">NEW</Link>
               </li>
               <li>
-                <Link to="/category">Category</Link>
-              </li>
-              <li>
                 <Link to="/pick">MD's Pick Sale 특가</Link>
               </li>
             </ul>
@@ -101,12 +97,12 @@ function Header() {
           </Link>
           {email ? (
             <button className="icon" onClick={handleLogout}>
-              <LogoutOutlinedIcon />
+              <AccountCircleIcon />
             </button>
           ) : (
             <Link to="/login">
               <button className="icon">
-                <LoginOutlinedIcon />
+                <AccountCircleIcon />
               </button>
             </Link>
           )}

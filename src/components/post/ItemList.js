@@ -4,7 +4,8 @@ import "swiper/swiper-bundle.css";
 import '../../css/ItemList.css';
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Link } from "react-router-dom";
-import {getBestItemProductList, getImageView, getNewItemProductList} from "../../api/productApi";
+import { API_SERVER_HOST } from '../../config/apiConfig';
+import GoodsImg1 from '../../img/goods.jpg';
 
 const ItemList = ({ title, items }) => {
     if (!items || items.length === 0) return;
@@ -45,17 +46,20 @@ const ItemList = ({ title, items }) => {
                 {items.map((item) => (
                     <SwiperSlide key={item.id}>
                         <div className="SlickBox">
-                            <Link to={`/product/${item.id}`}> {/* 링크 추가 */}
+                            <Link to={`/product/${item.id}`}>
                                 <div className="SlickImageContainer">
-                                    <img
-                                        src={"https://cdn.imweb.me/thumbnail/20241125/d781269838648.jpg"}
-                                        alt={item.name}
-                                        className="SlickImage"
-                                    />
-                                    <div className="SlickOverlay">
-                                        <div>
-                                            {item.name.split('|').map((part, index) => {
-                                                const isKorean = /[가-힣]/.test(part);
+                                  <img
+                                    src={
+                                      `${API_SERVER_HOST}/api/product/view/${item.uploadFileNames[0]}` ||
+                                      GoodsImg1
+                                    }
+                                    alt={item.name}
+                                    className="SlickImage"
+                                  />
+                                  <div className="SlickOverlay">
+                                    <div>
+                                      {item.name.split('|').map((part, index) => {
+                                        const isKorean = /[가-힣]/.test(part);
                                                 if (isKorean) {
                                                     const lines = part.match(/.{1,26}/g);
                                                     return (
