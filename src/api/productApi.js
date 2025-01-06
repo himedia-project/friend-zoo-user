@@ -29,3 +29,9 @@ export const getImageView = async (fileName) => {
   const response = await axiosInstance.get(`${host}/view/${fileName}`);
   return response.data;
 };
+
+// 상품 상세
+export const getProductById = async (productId) => {
+  const response = await axiosInstance.get(`${host}/detail/${productId}`);
+  return response.data;
+};
