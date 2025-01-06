@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../../css/SignIn.css';
 import { signupPost } from '../../api/loginApi';
-import { useNavigate } from 'react-router-dom';
-import AlertModal from '../../components/common/AlertModal';
+import Swal from 'sweetalert2'; // SweetAlert2 임포트
 
 const SignInPage = () => {
   const navigate = useNavigate();
@@ -13,12 +12,6 @@ const SignInPage = () => {
     confirmPassword: '',
     name: '',
     phone: '',
-  });
-  const [alertModal, setAlertModal] = useState({
-    open: false,
-    title: '',
-    message: '',
-    isSuccess: false,
   });
 
   const handleChange = (e) => {
@@ -33,11 +26,11 @@ const SignInPage = () => {
     const phoneRegex = /^010-\d{4}-\d{4}$/;
 
     if (!phoneRegex.test(formData.phone)) {
-      setAlertModal({
-        open: true,
+      Swal.fire({
         title: '입력 오류',
-        message: '전화번호는 010-XXXX-XXXX 형식으로 입력해주세요.',
-        isSuccess: false,
+        text: '전화번호는 010-XXXX-XXXX 형식으로 입력해주세요.',
+        icon: 'warning',
+        confirmButtonText: '확인',
       });
       return false;
     }
@@ -58,22 +51,23 @@ const SignInPage = () => {
         formData.password,
         formData.phone,
       );
-      setAlertModal({
-        open: true,
+      Swal.fire({
         title: '회원가입 성공',
-        message: '회원가입이 완료되었습니다.',
-        isSuccess: true,
-        onSuccess: () => {
+        text: '회원가입이 완료되었습니다.',
+        icon: 'success',
+        confirmButtonText: '확인',
+      }).then((result) => {
+        if (result.isConfirmed) {
           navigate('/login');
-        },
+        }
       });
     } catch (error) {
       console.error('회원가입 실패:', error);
-      setAlertModal({
-        open: true,
+      Swal.fire({
         title: '회원가입 실패',
-        message: '회원가입에 실패했습니다. 다시 시도해주세요.',
-        isSuccess: false,
+        text: '회원가입에 실패했습니다. 다시 시도해주세요.',
+        icon: 'error',
+        confirmButtonText: '확인',
       });
     }
   };
@@ -141,17 +135,6 @@ const SignInPage = () => {
         <span>이미 계정이 있으신가요?</span>
         <Link to="/login"> 로그인</Link>
       </div>
-
-      <AlertModal
-        open={alertModal.open}
-        onClose={() => {
-          setAlertModal({ ...alertModal, open: false });
-          alertModal.onSuccess?.();
-        }}
-        title={alertModal.title}
-        message={alertModal.message}
-        isSuccess={alertModal.isSuccess}
-      />
     </div>
   );
 };

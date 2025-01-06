@@ -1,16 +1,41 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import { Autoplay, Navigation } from 'swiper/modules';
 import 'swiper/swiper-bundle.css';
 import { API_SERVER_HOST } from '../../config/apiConfig';
 import GoodsImg1 from '../../img/goods.jpg';
 
-const CategoryItemList = ({ items }) => {
+const CategoryItemList = ({ items, category }) => {
   if (!items || items.length === 0) return <div>상품이 없습니다.</div>;
+
+  const getCategoryTitle = (category) => {
+    switch (category) {
+      case 1:
+        return '쿼카 카테고리 상품';
+      case 2:
+        return '강아지 카테고리 상품';
+      case 3:
+        return '악어 카테고리 상품';
+      case 4:
+        return '라이언 카테고리 상품';
+      case 5:
+        return '토끼 카테고리 상품';
+      case 6:
+        return '거북이 카테고리 상품';
+      case 7:
+        return '다람쥐 카테고리 상품';
+      case 8:
+        return '해달 카테고리 상품';
+      case 9:
+        return '고양이 카테고리 상품';
+      default:
+        return '카테고리 상품';
+    }
+  };
 
   return (
     <div className="bestItemsList_Container">
-      <h2 className="best-items-title">OO 카테고리 상품</h2>
+      <h2 className="best-items-title">{getCategoryTitle(category)}</h2>
       <Swiper
         modules={[Autoplay, Navigation]}
         spaceBetween={10}
@@ -36,7 +61,7 @@ const CategoryItemList = ({ items }) => {
             </div>
             <div className="info-container">
               <h3 className="slide-title">{item.name}</h3>
-              <p className="slide-price">{item.price} 원</p>
+              <p className="slide-price">{item.price.toLocaleString()} 원</p>
             </div>
           </SwiperSlide>
         ))}
