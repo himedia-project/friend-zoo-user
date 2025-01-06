@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import 'swiper/swiper-bundle.css';
 import { API_SERVER_HOST } from '../../config/apiConfig';
 import GoodsImg1 from '../../img/goods.jpg';
