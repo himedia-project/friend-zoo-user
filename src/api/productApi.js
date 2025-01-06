@@ -51,3 +51,9 @@ export const getCategoryId = async (categoryId) => {
   );
   return response.data;
 };
+
+// search http://localhost:8080/api/product/list/산리오
+export const getSearchProductList = async (keyword) => {
+  const response = await axiosInstance.get(`${host}/list/${keyword}`);
+  return response.data;
+};

@@ -25,6 +25,7 @@ import OrderHistoryPage from './pages/order/OrderHistoryPage';
 import PaymentPage from './pages/order/PaymentPage';
 import PayCompletePage from './pages/order/PayCompletePage';
 import NotFound from './components/common/NotFound';
+import SearchPage from './pages/search/SearchPage';
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
         <Route path="/join" element={<JoinPage />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/search" element={<SearchPage />} />
         <Route path="/heart" element={<MyPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/payment" element={<PaymentPage />} />
