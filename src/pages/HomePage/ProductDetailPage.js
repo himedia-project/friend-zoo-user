@@ -190,8 +190,16 @@ const ProductDetailPage = () => {
       ];
 
       await postOrder({ cartItems: orderItems });
-      navigate('/payment', {
-        state: { orderItems: orderItems },
+
+      Swal.fire({
+        title: '주문 성공',
+        text: '결제 페이지로 이동합니다.',
+        icon: 'success',
+        confirmButtonText: '확인',
+      }).then(() => {
+        navigate('/payment', {
+          state: { orderItems: orderItems },
+        });
       });
     } catch (error) {
       if (handleAuthError(error)) {
