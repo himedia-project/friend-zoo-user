@@ -143,12 +143,16 @@ const MyPage = () => {
                     <h2>{content.title}</h2>
                     <p>{content.description}</p>
                     <p className="price">{content.price}원</p>
-                    <button
-                      className="edit-button"
+                    <div
                       onClick={() => handleHeartClick(content.id, 'content')}
+                      style={{ cursor: 'pointer' }}
                     >
-                      찜하기
-                    </button>
+                      {content.heart ? (
+                        <FavoriteIcon style={{ color: 'red' }} />
+                      ) : (
+                        <FavoriteOutlinedIcon />
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
