@@ -21,6 +21,15 @@ function Header() {
   const handleProtectedAction = (path) => {
     if (requireAuth(email)) {
       navigate(path);
+    } else {
+      Swal.fire({
+        title: '로그인 필요',
+        text: '이 작업을 수행하려면 로그인이 필요합니다.',
+        icon: 'warning',
+        confirmButtonText: '로그인하기',
+      }).then(() => {
+        navigate('/login'); // 로그인 페이지로 이동
+      });
     }
   };
 
@@ -85,13 +94,13 @@ function Header() {
           </Link>
           <button
             className="icon"
-            onClick={() => handleProtectedAction('/heart')}
+            onClick={() => handleProtectedAction('/heart')} // 하트 버튼
           >
             <FavoriteOutlinedIcon />
           </button>
           <button
             className="icon"
-            onClick={() => handleProtectedAction('/cart')}
+            onClick={() => handleProtectedAction('/cart')} // 카트 버튼
           >
             <LocalGroceryStoreOutlinedIcon />
           </button>
