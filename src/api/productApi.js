@@ -10,7 +10,7 @@ export const getBestItemProductList = async () => {
 
 // 신규
 export const getNewItemProductList = async () => {
-  const response = await axiosInstance.get(`/product/list/new`);
+  const response = await axiosInstance.get(`/product/new`);
   return response.data;
 };
 

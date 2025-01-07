@@ -21,7 +21,7 @@ const ProductDetailPage = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
-  const [products, setProducts] = useState({ best: [], new: [] });
+  const [products, setProducts] = useState({ new: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [alertModal, setAlertModal] = useState({

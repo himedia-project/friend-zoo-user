@@ -28,7 +28,7 @@
     left: 50%; /* 중앙 정렬 */
     transform: translateX(-50%); /* 중앙 정렬 보정 */
     color: #000; /* 글자 색상 조정 (필요시) */
-    font-size: 17px; /* 글자 크기 조정 (필요시) */
+    font-size: 16px; /* 글자 크기 조정 (필요시) */
 }
 
 
