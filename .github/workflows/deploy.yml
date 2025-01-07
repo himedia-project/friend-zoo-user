@@ -24,7 +24,13 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Docker 이미지 생성
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPOSITORY_NAME }} .
+        run: |
+          docker build \
+            --build-arg REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }} \
+            --build-arg REACT_APP_FRONT_URL=${{ secrets.REACT_APP_FRONT_URL }} \
+            --build-arg REACT_APP_KAKAO_REST_API_KEY=${{ secrets.REACT_APP_KAKAO_REST_API_KEY }} \
+            --build-arg REACT_APP_KAKAO_CLIENT_SECRET=${{ secrets.REACT_APP_KAKAO_CLIENT_SECRET }} \
+            -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPOSITORY_NAME }} .
 
       - name: Docker Hub에 Docker 이미지 Push하기
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPOSITORY_NAME }}:latest
