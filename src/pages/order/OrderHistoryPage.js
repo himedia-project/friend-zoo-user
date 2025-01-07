@@ -128,6 +128,7 @@ const OrderHistoryPage = () => {
                             </span>
                           ))}
                         </h2>
+
                         <div className="product-purchase-info">
                           <div className="quantity">수량: {item.count}개</div>
                           <div className="price">
