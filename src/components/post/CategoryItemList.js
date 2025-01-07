@@ -101,9 +101,18 @@ const CategoryItemList = ({ items }) => {
                   )}
                 </span>
               </div>
-              <div className="SlickInfoContainer">
-                <h3 className="SlickInfoTitle">{item.name}</h3>
-                <p className="slide-price">{item.price.toLocaleString()}원</p>
+              <div className="SwiperGridInfoContainer">
+                <h3 className="SwiperGridInfoTitle">
+                  {item.name.split('|').map((part, index) => (
+                    <span key={index} className={index > 0 ? 'SwiperGridInfoSubText' : ''}>
+                {part}
+                      {index < item.name.split('|').length - 1 && <br />}
+            </span>
+                  ))}
+                </h3>
+                <p className="SwiperGridPrice" style={{ position: 'relative' }}>
+                  {item.price.toLocaleString()}원
+                </p>
               </div>
             </Link>
           </SwiperSlide>
