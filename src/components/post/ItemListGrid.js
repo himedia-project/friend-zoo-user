@@ -85,6 +85,20 @@ const ItemListGrid = ({ title, items }) => {
                     alt={item.name}
                     className="SwiperGridImage"
                   />
+                  <span
+                    onClick={(e) => {
+                      e.stopPropagation(); // 이벤트 버블링 중단
+                      e.preventDefault(); // 기본 동작 방지
+                      handleHeartClick(item.id); // 찜 기능 동작
+                    }}
+                    className="heart-icon"
+                  >
+        {favoritedItems[item.id] ? (
+          <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
+        ) : (
+          <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
+        )}
+    </span>
                   <div className="SwiperGridOverlay">
                     <div>
                       {item.name.split('|').map((part, index) => {
@@ -93,10 +107,10 @@ const ItemListGrid = ({ title, items }) => {
                           const lines = part.match(/.{1,26}/g);
                           return (
                             <span key={index} className={index > 0 ? 'SwiperGridImageInfoContainer' : ''}>
-                              {lines.map((line, lineIndex) => (
-                                <span key={lineIndex}>{line}<br /></span>
-                              ))}
-                            </span>
+                            {lines.map((line, lineIndex) => (
+                              <span key={lineIndex}>{line}<br /></span>
+                            ))}
+                        </span>
                           );
                         }
                         return null;
@@ -108,32 +122,22 @@ const ItemListGrid = ({ title, items }) => {
                     </div>
                   </div>
                 </div>
+
               </Link>
               <div className="SwiperGridInfoContainer">
                 <h3 className="SwiperGridInfoTitle">
                   {item.name.split('|').map((part, index) => (
                     <span key={index} className={index > 0 ? 'SwiperGridInfoSubText' : ''}>
-                      {part}
+                {part}
                       {index < item.name.split('|').length - 1 && <br />}
-                    </span>
+            </span>
                   ))}
                 </h3>
-                  <p className="SwiperGridPrice">{item.price.toLocaleString()}원
-                  <span onClick={() => handleHeartClick(item.id)}
-                        style={{
-                          cursor: 'pointer',
-                          marginLeft: '10px',
-                          position: 'absolute',
-                          bottom: 4, right: 7, zIndex: 1
-                        }}>
-                    {favoritedItems[item.id] ? (
-                      <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
-                    ) : (
-                      <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
-                    )}
-                  </span>
-                  </p>
+                <p className="SwiperGridPrice" style={{ position: 'relative' }}>
+                  {item.price.toLocaleString()}원
+                </p>
               </div>
+
             </div>
           </SwiperSlide>
         ))}

@@ -120,24 +120,31 @@ const ItemList = ({ title, items }) => {
                 </div>
               </Link>
 
-              <div className="SlickInfoContainer">
-                <h3 className="SlickInfoTitle">
+              <div className="SlickInfoContainer" style={{ position: 'relative', height: '200px' }}> {/* 높이를 고정 */}
+                <h3 className="SlickInfoTitle" style={{ marginBottom: '40px' }}> {/* 하트 아이콘과의 간격 추가 */}
                   {item.name.split('|').map((part, index) => (
                     <span key={index} className={index > 0 ? 'SlickInfoSubText' : ''}>
-                      {part}
+        {part}
                       {index < item.name.split('|').length - 1 && <br />}
-                    </span>
+      </span>
                   ))}
                 </h3>
                 <p className="slide-price">{item.price.toLocaleString()}원</p>
+
                 <span onClick={() => handleHeartClick(item.id)}
-                      style={{ cursor: 'pointer', position: 'absolute', bottom: 10, right: 60, zIndex: 1 }}>
-                  {favoritedItems[item.id] ? (
-                    <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
-                  ) : (
-                    <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
-                  )}
-                </span>
+                      style={{
+                        cursor: 'pointer',
+                        position: 'absolute',
+                        bottom: '220px',
+                        right: '10px',
+                        zIndex: 1
+                      }}>
+    {favoritedItems[item.id] ? (
+      <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
+    ) : (
+      <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
+    )}
+  </span>
               </div>
             </div>
           </SwiperSlide>

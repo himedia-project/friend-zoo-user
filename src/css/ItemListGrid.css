@@ -95,3 +95,12 @@
 .SwiperGridPrice {
     margin: -10px 0 10px 0;
 }
+
+.heart-icon {
+    cursor: pointer;
+    position: absolute;
+    bottom: 7px;
+    right: 10px;
+    z-index: 100;
+}
+

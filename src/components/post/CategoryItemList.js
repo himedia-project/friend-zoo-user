@@ -7,8 +7,8 @@ import { API_SERVER_HOST } from '../../config/apiConfig';
 import GoodsImg1 from '../../img/goods.jpg';
 
 const CategoryItemList = ({ items }) => {
-  const { categoryId } = useParams(); // URL에서 categoryId 가져오기
-  const category = parseInt(categoryId, 10); // 문자열을 정수로 변환
+  const { categoryId } = useParams();
+  const category = parseInt(categoryId, 10);
 
   if (!items || items.length === 0) return <div>상품이 없습니다.</div>;
 
