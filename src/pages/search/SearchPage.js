@@ -9,16 +9,54 @@ import {
 } from '../../api/productApi';
 import '../../css/SearchPage.css';
 import { API_SERVER_HOST } from '../../config/apiConfig';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import axiosInstance from '../../api/axiosInstance';
+import Swal from 'sweetalert2';
 
 const SearchPage = () => {
   const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(
     searchParams.get('keyword') || '',
   );
+  const [favoritedItems, setFavoritedItems] = useState({});
   const [products, setProducts] = useState({ best: [], new: [], mdpick: [] });
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  const handleHeartClick = async (id) => {
+    try {
+      const response = await axiosInstance.post(`/heart/product/${id}`, {}, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      setFavoritedItems((prev) => ({
+        ...prev,
+        [id]: !prev[id],
+      }));
+
+      const message = !favoritedItems[id] ? '상품이 찜 목록에 추가되었습니다.' : '상품이 찜 목록에서 제거되었습니다.';
+      Swal.fire({
+        title: !favoritedItems[id] ? '찜하기 성공' : '찜하기 해제',
+        text: message,
+        icon: 'success',
+        confirmButtonText: '확인',
+      });
+    } catch (error) {
+      console.error('찜하기 실패:', error);
+      Swal.fire({
+        title: '찜하기 실패',
+        text: '로그인을 해주시기 바랍니다.',
+        icon: 'error',
+        confirmButtonText: '확인',
+      });
+        navigate('/login');
+        window.scrollTo(0, 0);
+    }
+  };
 
   useEffect(() => {
     fetchInitialProducts();
@@ -111,7 +149,24 @@ const SearchPage = () => {
                       </span>
                     ))}
                   </h3>
-                  <p className="price">{item.price.toLocaleString()}원</p>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <p className="price" style={{ marginRight: '8px' }}>
+                      {item.price.toLocaleString()}원
+                    </p>
+                    <span
+                      onClick={(e) => {
+                        e.stopPropagation(); // 클릭 이벤트가 부모 요소로 전파되지 않도록 방지
+                        handleHeartClick(item.id);
+                      }}
+                      style={{ cursor: 'pointer', zIndex: 1 }}
+                    >
+                        {favoritedItems[item.id] ? (
+                          <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
+                        ) : (
+                          <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
+                        )}
+                      </span>
+                  </div>
                 </div>
               </div>
             ))}
@@ -140,12 +195,29 @@ const SearchPage = () => {
                           key={index}
                           className={index > 0 ? 'product-info-sub' : ''}
                         >
-                          {part}
+                {part}
                           {index < item.name.split('|').length - 1 && <br />}
-                        </span>
+              </span>
                       ))}
                     </h3>
-                    <p className="price">{item.price.toLocaleString()}원</p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <p className="price" style={{ marginRight: '8px' }}>
+                        {item.price.toLocaleString()}원
+                      </p>
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation(); // 클릭 이벤트가 부모 요소로 전파되지 않도록 방지
+                          handleHeartClick(item.id);
+                        }}
+                        style={{ cursor: 'pointer', zIndex: 1 }}
+                      >
+              {favoritedItems[item.id] ? (
+                <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
+              ) : (
+                <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
+              )}
+            </span>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -175,12 +247,29 @@ const SearchPage = () => {
                           key={index}
                           className={index > 0 ? 'product-info-sub' : ''}
                         >
-                          {part}
+                {part}
                           {index < item.name.split('|').length - 1 && <br />}
-                        </span>
+              </span>
                       ))}
                     </h3>
-                    <p className="price">{item.price.toLocaleString()}원</p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <p className="price" style={{ marginRight: '8px' }}>
+                        {item.price.toLocaleString()}원
+                      </p>
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation(); // 클릭 이벤트가 부모 요소로 전파되지 않도록 방지
+                          handleHeartClick(item.id);
+                        }}
+                        style={{ cursor: 'pointer', zIndex: 1 }}
+                      >
+              {favoritedItems[item.id] ? (
+                <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
+              ) : (
+                <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
+              )}
+            </span>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -215,8 +304,26 @@ const SearchPage = () => {
                         </span>
                       ))}
                     </h3>
-                    <p className="price">{item.price.toLocaleString()}원</p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <p className="price" style={{ marginRight: '8px' }}>
+                        {item.price.toLocaleString()}원
+                      </p>
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation(); // 클릭 이벤트가 부모 요소로 전파되지 않도록 방지
+                          handleHeartClick(item.id);
+                        }}
+                        style={{ cursor: 'pointer', zIndex: 1 }}
+                      >
+                        {favoritedItems[item.id] ? (
+                          <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
+                        ) : (
+                          <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
+                        )}
+                      </span>
+                    </div>
                   </div>
+
                 </div>
               ))}
             </div>

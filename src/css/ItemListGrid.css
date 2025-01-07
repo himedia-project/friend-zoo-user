@@ -77,7 +77,6 @@
 .SwiperGridInfoContainer {
     width: 19rem;
     margin: auto;
-    text-align: center;
 }
 
 .SwiperGridInfoTitle {
@@ -85,7 +84,6 @@
     width: fit-content;
     font-weight: 400;
     font-size: 16px;
-    text-align: center;
 }
 
 .SwiperGridInfoSubText {

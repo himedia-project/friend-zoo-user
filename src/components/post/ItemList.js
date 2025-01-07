@@ -16,7 +16,6 @@ const ItemList = ({ title, items }) => {
   const navigate = useNavigate();
 
   const handleHeartClick = async (id) => {
-
     try {
       const response = await axiosInstance.post(`/heart/product/${id}`, {}, {
         headers: {
@@ -40,12 +39,15 @@ const ItemList = ({ title, items }) => {
       console.error('찜하기 실패:', error);
       Swal.fire({
         title: '찜하기 실패',
-        text: '상품을 찜하는 데 실패했습니다.',
+        text: '로그인을 해주시기 바랍니다.',
         icon: 'error',
         confirmButtonText: '확인',
       });
+      window.scrollTo(0, 0);
+      navigate('/login');
     }
   };
+
 
   if (!items || items.length === 0) return null;
 
@@ -128,7 +130,8 @@ const ItemList = ({ title, items }) => {
                   ))}
                 </h3>
                 <p className="slide-price">{item.price.toLocaleString()}원</p>
-                <span onClick={() => handleHeartClick(item.id)} style={{ cursor: 'pointer', position: 'absolute', bottom: 10, right: 60, zIndex: 1 }}>
+                <span onClick={() => handleHeartClick(item.id)}
+                      style={{ cursor: 'pointer', position: 'absolute', bottom: 10, right: 60, zIndex: 1 }}>
                   {favoritedItems[item.id] ? (
                     <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
                   ) : (

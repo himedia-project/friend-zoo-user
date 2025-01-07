@@ -6,17 +6,10 @@ import CategoryButton from '../../components/post/CategoryButton';
 import CategoryItemList from '../../components/post/CategoryItemList';
 import { getCategoryId } from '../../api/productApi';
 
-const categoryTitles = {
-  강아지: '강아지 카테고리',
-  고양이: '고양이 카테고리',
-  쿼카: '쿼카 카테고리',
-};
-
 const CategoryPage = () => {
-  const { categoryId, categoryName } = useParams();
-  console.log('categoryId: ', categoryId);
-  console.log('categoryName: ', categoryName);
+  const { categoryId } = useParams();
 
+  const [categoryName, setCategoryName] = useState('');
   const [checkedItems, setCheckedItems] = useState({
     'Best 아이템': false,
     'New 아이템': false,
@@ -29,6 +22,7 @@ const CategoryPage = () => {
 
   useEffect(() => {
     fetchProducts(categoryId);
+    updateCategoryName(categoryId);
   }, [categoryId]);
 
   const fetchProducts = async (categoryId) => {
@@ -44,6 +38,41 @@ const CategoryPage = () => {
     }
   };
 
+  const updateCategoryName = (categoryId) => {
+    switch (categoryId) {
+      case '1':
+        setCategoryName('🦫 쿼카 카테고리 🍃');
+        break;
+      case '2':
+        setCategoryName('🐕 강아지 카테고리 🐶');
+        break;
+      case '3':
+        setCategoryName('🐊 악어 카테고리 🌴');
+        break;
+      case '4':
+        setCategoryName('🐅 라이언 카테고리 🍖');
+        break;
+      case '5':
+        setCategoryName('🐇 토끼 카테고리 🍀');
+        break;
+      case '6':
+        setCategoryName('🐢 거북이 카테고리 🪵');
+        break;
+      case '7':
+        setCategoryName('🐿️ 다람쥐 카테고리 🌲');
+        break;
+      case '8':
+        setCategoryName('🦦 해달 카테고리 🌊');
+        break;
+      case '9':
+        setCategoryName('🐈 고양이 카테고리 🐾');
+        break;
+      default:
+        setCategoryName('기타 카테고리');
+    }
+  };
+
+
   const handleChange = (event) => {
     const { name, checked } = event.target;
     setCheckedItems((prevState) => ({ ...prevState, [name]: checked }));
@@ -56,7 +85,7 @@ const CategoryPage = () => {
   return (
     <div>
       <SliderComponent />
-      <h1>{categoryTitles[categoryName] || '카테고리'}</h1>
+      <h1>{categoryName}</h1>
       <CategoryButton />
 
       {Object.keys(checkedItems).map((item) => (

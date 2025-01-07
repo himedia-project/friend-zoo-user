@@ -33,7 +33,7 @@ export const getStyleItemProductList = async () => {
   return response.data;
 };
 
-// 카테고리 조회
+// 해당 카테고리 조회
 export const getCategoryId = async (categoryId) => {
   const response = await axiosInstance.get(
     `/product/detail/category/${categoryId}`,

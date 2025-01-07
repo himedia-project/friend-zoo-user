@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import '../../css/Detail.css';
 import ItemList from '../../components/post/ItemList';
 import { getNewItemProductList } from '../../api/productApi';
@@ -8,8 +8,6 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import { postChangeCart } from '../../api/cartApi';
-import AlertModal from '../../components/common/AlertModal';
-import ConfirmModal from '../../components/common/ConfirmModal';
 import { API_SERVER_HOST } from '../../config/apiConfig';
 import axiosInstance from '../../api/axiosInstance';
 import { useSelector } from 'react-redux';
@@ -20,22 +18,11 @@ import { postOrder } from '../../api/orderApi';
 const ProductDetailPage = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [product, setProduct] = useState(null);
   const [products, setProducts] = useState({ new: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [alertModal, setAlertModal] = useState({
-    open: false,
-    title: '',
-    message: '',
-    isSuccess: true,
-  });
-  const [confirmModal, setConfirmModal] = useState({
-    open: false,
-    title: '',
-    message: '',
-    isSuccess: true,
-  });
   const [isFavorited, setIsFavorited] = useState(false);
   const { email } = useSelector((state) => state.loginSlice);
   const { requireAuth, handleAuthError } = useCustomLogin();
@@ -49,6 +36,12 @@ const ProductDetailPage = () => {
     const middlePosition = window.innerHeight / 2;
     window.scrollTo({ top: middlePosition, behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    if (location.pathname.includes('/product/')) {
+      scrollToMiddle();
+    }
+  }, [location]);
 
   const fetchProductDetail = async () => {
     try {
@@ -82,7 +75,6 @@ const ProductDetailPage = () => {
   };
 
   const handleAddToCart = async () => {
-    console.log('email', email);
     if (!requireAuth(email)) {
       Swal.fire({
         title: '로그인 필요',
@@ -97,42 +89,36 @@ const ProductDetailPage = () => {
 
     try {
       await postChangeCart({ productId: productId, qty: 1 });
-      setAlertModal({
-        open: true,
+      Swal.fire({
         title: '장바구니 담기 성공',
-        message: '상품이 장바구니에 담겼습니다.',
-        isSuccess: true,
+        text: '상품이 장바구니에 담겼습니다.',
+        icon: 'success',
+        confirmButtonText: '확인',
+      }).then(() => {
+        Swal.fire({
+          title: '장바구니로 이동',
+          text: '장바구니 페이지로 이동하시겠습니까?',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: '네',
+          cancelButtonText: '아니오',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate('/cart');
+          }
+        });
       });
     } catch (error) {
       if (handleAuthError(error)) {
         return;
       }
-      setAlertModal({
-        open: true,
+      Swal.fire({
         title: '장바구니 담기 실패',
-        message: '상품을 장바구니에 담는데 실패했습니다.',
-        isSuccess: false,
+        text: '상품을 장바구니에 담는데 실패했습니다.',
+        icon: 'error',
+        confirmButtonText: '확인',
       });
     }
-  };
-
-  const handleAlertClose = () => {
-    setAlertModal({ ...alertModal, open: false });
-    setConfirmModal({
-      open: true,
-      title: '장바구니로 이동',
-      message: '장바구니 페이지로 이동하시겠습니까?',
-      isSuccess: true,
-    });
-  };
-
-  const handleConfirmClose = () => {
-    setConfirmModal({ ...confirmModal, open: false });
-  };
-
-  const handleConfirm = () => {
-    setConfirmModal({ ...confirmModal, open: false });
-    navigate('/cart');
   };
 
   const handleHeartClick = async () => {
@@ -151,19 +137,19 @@ const ProductDetailPage = () => {
       const message = !isFavorited
         ? '상품이 찜 목록에 추가되었습니다.'
         : '상품이 찜 목록에서 제거되었습니다.';
-      setAlertModal({
-        open: true,
+      Swal.fire({
         title: !isFavorited ? '찜하기 성공' : '찜하기 해제',
-        message,
-        isSuccess: true,
+        text: message,
+        icon: 'success',
+        confirmButtonText: '확인',
       });
     } catch (error) {
       console.error('찜하기 실패:', error);
-      setAlertModal({
-        open: true,
+      Swal.fire({
         title: '찜하기 실패',
-        message: '상품을 찜하는 데 실패했습니다.',
-        isSuccess: false,
+        text: '상품을 찜하는 데 실패했습니다.',
+        icon: 'error',
+        confirmButtonText: '확인',
       });
     }
   };
@@ -235,22 +221,6 @@ const ProductDetailPage = () => {
               alt={product.title}
               className="ProductPhoto"
             />
-            <span
-              onClick={handleHeartClick}
-              style={{
-                cursor: 'pointer',
-                position: 'absolute',
-                bottom: 10,
-                right: 10,
-                zIndex: 1,
-              }}
-            >
-              {isFavorited ? (
-                <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
-              ) : (
-                <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
-              )}
-            </span>
           </div>
           <div className="ProductInfoContainer">
             <h2 className="ProductTitle">{product.name}</h2>
@@ -265,20 +235,27 @@ const ProductDetailPage = () => {
               ))}{' '}
               {product.reviewsCount}개 구매평
             </p>
-            <p>
-              가격: {product.price.toLocaleString()}원
-              <ShareOutlinedIcon />
+            <p style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span>
+                가격: {product.price.toLocaleString()}원
+              </span>
+              <span style={{ display: 'flex', alignItems: 'center' }}>
+                <span style={{ marginLeft: '8px', cursor: 'pointer' }} onClick={handleHeartClick}>
+                  {isFavorited ? (
+                    <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
+                  ) : (
+                    <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
+                  )}
+                </span>
+                <ShareOutlinedIcon style={{ marginLeft: '8px', cursor: 'pointer' }} />
+              </span>
             </p>
             <hr />
-            <br />
             <div className="ProductSubTextContainer">
               <p>배송 방법: {product.shippingMethod}</p>
               <p>
-                배송비: {(product.shippingCost || 0).toLocaleString()}원 (
-                {(product.freeShippingThreshold || 0).toLocaleString()}원 이상
-                무료배송) | 도서산간 배송비 추가
+                배송비: 3,000원 (50,000원 이상 무료배송) | 도서산간 배송비 추가
               </p>
-              <p>배송 안내: {product.deliveryInfo || '정보 없음'}</p>
               <div className="ButtonContainer">
                 <button className="ProductButton" onClick={handlePurchase}>
                   구매하기
@@ -289,24 +266,10 @@ const ProductDetailPage = () => {
               </div>
             </div>
           </div>
+
+
         </div>
       )}
-
-      <AlertModal
-        open={alertModal.open}
-        onClose={handleAlertClose}
-        title={alertModal.title}
-        message={alertModal.message}
-        isSuccess={alertModal.isSuccess}
-      />
-      <ConfirmModal
-        open={confirmModal.open}
-        onClose={handleConfirmClose}
-        title={confirmModal.title}
-        message={confirmModal.message}
-        isSuccess={confirmModal.isSuccess}
-        onConfirm={handleConfirm}
-      />
     </div>
   );
 };

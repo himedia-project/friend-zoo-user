@@ -40,7 +40,7 @@ const PaymentPage = () => {
     navigate('/payment/complete');
   };
 
-  if (!orderData) return <div>Loading...</div>;
+  if (!orderData) return;
 
   return (
     <div className="payment-container">

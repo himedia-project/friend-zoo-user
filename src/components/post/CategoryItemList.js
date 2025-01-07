@@ -1,11 +1,15 @@
 import React from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper/modules';
 import 'swiper/swiper-bundle.css';
 import { API_SERVER_HOST } from '../../config/apiConfig';
 import GoodsImg1 from '../../img/goods.jpg';
 
-const CategoryItemList = ({ items, category }) => {
+const CategoryItemList = ({ items }) => {
+  const { categoryId } = useParams(); // URL에서 categoryId 가져오기
+  const category = parseInt(categoryId, 10); // 문자열을 정수로 변환
+
   if (!items || items.length === 0) return <div>상품이 없습니다.</div>;
 
   const getCategoryTitle = (category) => {
@@ -35,7 +39,6 @@ const CategoryItemList = ({ items, category }) => {
 
   return (
     <div className="bestItemsList_Container">
-      <h2 className="best-items-title">{getCategoryTitle(category)}</h2>
       <Swiper
         modules={[Autoplay, Navigation]}
         spaceBetween={10}
@@ -49,20 +52,22 @@ const CategoryItemList = ({ items, category }) => {
       >
         {items.map((item) => (
           <SwiperSlide className="slide-box" key={item.id}>
-            <div className="image-container">
-              <img
-                src={
-                  `${API_SERVER_HOST}/api/product/view/${item.uploadFileNames[0]}` ||
-                  GoodsImg1
-                }
-                alt={item.name}
-                className="slide-image"
-              />
-            </div>
-            <div className="info-container">
-              <h3 className="slide-title">{item.name}</h3>
-              <p className="slide-price">{item.price.toLocaleString()} 원</p>
-            </div>
+            <Link to={`/product/${item.id}`}>
+              <div className="image-container">
+                <img
+                  src={
+                    `${API_SERVER_HOST}/api/product/view/${item.uploadFileNames[0]}` ||
+                    GoodsImg1
+                  }
+                  alt={item.name}
+                  className="slide-image"
+                />
+              </div>
+              <div className="info-container">
+                <h3 className="slide-title">{item.name}</h3>
+                <p className="slide-price">{item.price.toLocaleString()} 원</p>
+              </div>
+            </Link>
           </SwiperSlide>
         ))}
       </Swiper>

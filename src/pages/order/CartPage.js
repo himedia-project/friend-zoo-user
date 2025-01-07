@@ -3,24 +3,11 @@ import '../../css/CartPage.css';
 import CartItem from '../../components/cart/CartItem';
 import { getCartItems, postChangeCart } from '../../api/cartApi';
 import { useNavigate } from 'react-router-dom';
-import ConfirmModal from '../../components/common/ConfirmModal';
-import AlertModal from '../../components/common/AlertModal';
+import Swal from 'sweetalert2';
 
 const CartPage = () => {
   const [items, setItems] = useState([]);
   const navigate = useNavigate();
-  const [confirmModal, setConfirmModal] = useState({
-    open: false,
-    title: '',
-    message: '',
-    onConfirm: null,
-  });
-  const [alertModal, setAlertModal] = useState({
-    open: false,
-    title: '',
-    message: '',
-    isSuccess: true,
-  });
 
   const fetchCartItems = async () => {
     const res = await getCartItems();
@@ -45,7 +32,6 @@ const CartPage = () => {
     setItems(
       items.map((item) => {
         if (item.id === id) {
-          // cartItemId를 기준으로 비교
           if (action === 'increase') {
             return { ...item, quantity: item.quantity + 1 };
           } else if (action === 'decrease' && item.quantity > 1) {
@@ -59,34 +45,26 @@ const CartPage = () => {
     );
   };
 
-  const handleRemove = (cartItemId, productId) => {
-    setConfirmModal({
-      open: true,
+  const handleRemove = async (cartItemId, productId) => {
+    const result = await Swal.fire({
       title: '상품 삭제',
-      message: '삭제하시겠습니까?',
-      onConfirm: async () => {
-        try {
-          await postChangeCart({ cartItemId, productId, qty: 0 });
-          await fetchCartItems();
-          setConfirmModal({ ...confirmModal, open: false });
-          setAlertModal({
-            open: true,
-            title: '삭제 완료',
-            message: '삭제되었습니다.',
-            isSuccess: true,
-          });
-        } catch (error) {
-          setConfirmModal({ ...confirmModal, open: false });
-          setAlertModal({
-            open: true,
-            title: '오류',
-            message: '삭제 중 오류가 발생했습니다.',
-            isSuccess: false,
-          });
-          console.error(error);
-        }
-      },
+      text: '삭제하시겠습니까?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '삭제',
+      cancelButtonText: '취소',
     });
+
+    if (result.isConfirmed) {
+      try {
+        await postChangeCart({ cartItemId, productId, qty: 0 });
+        await fetchCartItems();
+        Swal.fire('삭제 완료', '삭제되었습니다.', 'success');
+      } catch (error) {
+        Swal.fire('오류', '삭제 중 오류가 발생했습니다.', 'error');
+        console.error(error);
+      }
+    }
   };
 
   const calculateTotals = () => {
@@ -106,7 +84,7 @@ const CartPage = () => {
   const handlePurchase = () => {
     const selectedItems = items.filter((item) => item.selected);
     if (selectedItems.length === 0) {
-      alert('선택된 상품이 없습니다.');
+      Swal.fire('알림', '선택된 상품이 없습니다.', 'warning');
       return;
     }
 
@@ -168,9 +146,9 @@ const CartPage = () => {
             </div>
             <div className="order-item discount">
               <span>총 할인금액</span>
-              <span class="color-red">{discountTotal.toLocaleString()}원</span>
+              <span className="color-red">{discountTotal.toLocaleString()}원</span>
             </div>
-            <hr></hr>
+            <hr />
             <div className="order-total">
               <span>총 금액</span>
               <span>{totalAmount.toLocaleString()}원</span>
@@ -188,21 +166,6 @@ const CartPage = () => {
           </button>
         </div>
       </div>
-      <ConfirmModal
-        open={confirmModal.open}
-        onClose={() => setConfirmModal({ ...confirmModal, open: false })}
-        title={confirmModal.title}
-        message={confirmModal.message}
-        isSuccess={true}
-        onConfirm={confirmModal.onConfirm}
-      />
-      <AlertModal
-        open={alertModal.open}
-        onClose={() => setAlertModal({ ...alertModal, open: false })}
-        title={alertModal.title}
-        message={alertModal.message}
-        isSuccess={alertModal.isSuccess}
-      />
     </>
   );
 };

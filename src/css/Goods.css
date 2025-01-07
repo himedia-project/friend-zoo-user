@@ -102,9 +102,7 @@ body {
 .edit-button:hover {
   background-color: #ff88aa;
 }
-.shopping-cart-container * {
-  color: #000;
-}
+
 .product-details {
   padding-left: 10px;
 }
