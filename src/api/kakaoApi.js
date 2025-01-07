@@ -23,7 +23,10 @@ console.log('REDIRECT URI:', redirect_uri);
 export const getKakaoLoginLink = () => {
   const kakaoURL = new URL(auth_code_path);
   kakaoURL.searchParams.append('client_id', rest_api_key);
-  kakaoURL.searchParams.append('redirect_uri', redirect_uri);
+  kakaoURL.searchParams.append(
+    'redirect_uri',
+    encodeURIComponent(redirect_uri),
+  );
   kakaoURL.searchParams.append('response_type', 'code');
 
   console.log('getKakaoLoginLink kakaoURL: ', kakaoURL.toString());
