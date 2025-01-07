@@ -200,7 +200,7 @@ const ProductDetailPage = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return;
   if (error) return <div>문제가 발생했습니다: {error.message}</div>;
 
   return (

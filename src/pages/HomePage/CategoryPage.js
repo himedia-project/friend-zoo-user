@@ -10,11 +10,6 @@ const CategoryPage = () => {
   const { categoryId } = useParams();
 
   const [categoryName, setCategoryName] = useState('');
-  const [checkedItems, setCheckedItems] = useState({
-    'Best 아이템': false,
-    'New 아이템': false,
-    'MD Pick 아이템': false,
-  });
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -73,11 +68,6 @@ const CategoryPage = () => {
   };
 
 
-  const handleChange = (event) => {
-    const { name, checked } = event.target;
-    setCheckedItems((prevState) => ({ ...prevState, [name]: checked }));
-  };
-
   const itemComponents = {
     2: <CategoryItemList items={products} />,
   };
@@ -87,22 +77,6 @@ const CategoryPage = () => {
       <SliderComponent />
       <h1>{categoryName}</h1>
       <CategoryButton />
-
-      {Object.keys(checkedItems).map((item) => (
-        <FormControlLabel
-          key={item}
-          control={
-            <Switch
-              checked={checkedItems[item]}
-              onChange={handleChange}
-              name={item}
-              inputProps={{ 'aria-label': 'controlled' }}
-            />
-          }
-          label={item.replace(/([A-Z])/g, ' $1').trim()}
-          labelPlacement="start"
-        />
-      ))}
 
       {Object.keys(products).map((item) => itemComponents[item])}
     </div>
