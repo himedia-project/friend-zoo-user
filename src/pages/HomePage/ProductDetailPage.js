@@ -23,7 +23,6 @@ const ProductDetailPage = () => {
   const [products, setProducts] = useState({ new: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isFavorited, setIsFavorited] = useState(false);
   const { email } = useSelector((state) => state.loginSlice);
   const { requireAuth, handleAuthError } = useCustomLogin();
 
@@ -133,12 +132,16 @@ const ProductDetailPage = () => {
         },
       );
 
-      setIsFavorited(!isFavorited);
-      const message = !isFavorited
+      setProduct((prev) => ({
+        ...prev,
+        heart: !prev.heart,
+      }));
+
+      const message = !product.heart
         ? '상품이 찜 목록에 추가되었습니다.'
         : '상품이 찜 목록에서 제거되었습니다.';
       Swal.fire({
-        title: !isFavorited ? '찜하기 성공' : '찜하기 해제',
+        title: !product.heart ? '찜하기 성공' : '찜하기 해제',
         text: message,
         icon: 'success',
         confirmButtonText: '확인',
@@ -235,19 +238,33 @@ const ProductDetailPage = () => {
               ))}{' '}
               {product.reviewsCount}개 구매평
             </p>
-            <p style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span>
-                가격: {product.price.toLocaleString()}원
-              </span>
+            <p
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <span>가격: {product.price.toLocaleString()}원</span>
               <span style={{ display: 'flex', alignItems: 'center' }}>
-                <span style={{ marginLeft: '8px', cursor: 'pointer' }} onClick={handleHeartClick}>
-                  {isFavorited ? (
+                <span
+                  style={{ marginLeft: '8px', cursor: 'pointer' }}
+                  onClick={handleHeartClick}
+                >
+                  {product.heart ? (
                     <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
                   ) : (
                     <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
                   )}
+                  {product.heartCount && (
+                    <span style={{ marginLeft: '4px' }}>
+                      {product.heartCount}
+                    </span>
+                  )}
                 </span>
-                <ShareOutlinedIcon style={{ marginLeft: '8px', cursor: 'pointer' }} />
+                <ShareOutlinedIcon
+                  style={{ marginLeft: '8px', cursor: 'pointer' }}
+                />
               </span>
             </p>
             <hr />
@@ -266,8 +283,6 @@ const ProductDetailPage = () => {
               </div>
             </div>
           </div>
-
-
         </div>
       )}
     </div>
