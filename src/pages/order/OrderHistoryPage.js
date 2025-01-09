@@ -78,7 +78,15 @@ const OrderHistoryPage = () => {
                   <div className="order-info">
                     <h3>주문번호: {order.orderCode || order.orderId}</h3>
                     <span className="order-date">
-                      {new Date(order.orderDate).toLocaleString()}
+                      {new Date(order.orderDate).toLocaleString('ko-KR', {
+                        timeZone: 'Asia/Seoul',
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                      })}
                     </span>
                     <span
                       className={`order-status ${order.orderStatus.toLowerCase()}`}
