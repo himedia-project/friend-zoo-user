@@ -47,9 +47,7 @@ export const getAccessToken = async (authCode) => {
 // 카카오 사용자 정보 서버에 요청
 export const getMemberWithAccessToken = async (accessToken) => {
   const headers = {
-    headers: {
-      withCredentials: true,
-    },
+    withCredentials: true,
   };
   try {
     const res = await axios.get(
