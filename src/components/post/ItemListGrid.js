@@ -1,9 +1,9 @@
-import React, { useState } from "react"; // useState 추가
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/swiper-bundle.css";
+import React, { useState } from 'react'; // useState 추가
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.css';
 import '../../css/ItemListGrid.css';
-import { Autoplay, Navigation, Pagination, Grid } from "swiper/modules";
-import { Link, useNavigate } from "react-router-dom"; // useNavigate 추가
+import { Autoplay, Navigation, Pagination, Grid } from 'swiper/modules';
+import { Link, useNavigate } from 'react-router-dom'; // useNavigate 추가
 import { API_SERVER_HOST } from '../../config/apiConfig';
 import GoodsImg1 from '../../img/goods.jpg';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -11,29 +11,26 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import axiosInstance from '../../api/axiosInstance';
 import Swal from 'sweetalert2';
 
-const ItemListGrid = ({ title, items }) => {
-  const [favoritedItems, setFavoritedItems] = useState({}); // 상태 초기화
+const ItemListGrid = ({ title, items, onHeartChange }) => {
   const navigate = useNavigate(); // useNavigate 훅 사용
 
   if (!items || items.length === 0) return null; // null 반환으로 수정
 
   const handleHeartClick = async (id) => {
     try {
-      const response = await axiosInstance.post(`/heart/product/${id}`, {}, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      await axiosInstance.post(`/heart/product/${id}`);
 
-      setFavoritedItems((prev) => ({
-        ...prev,
-        [id]: !prev[id],
-      }));
+      // Find the item and toggle its heart status
+      const updatedItem = items.find((item) => item.id === id);
+      if (updatedItem) {
+        updatedItem.heart = !updatedItem.heart;
+        // Notify parent component about the heart change
+        onHeartChange && onHeartChange(id, updatedItem.heart);
+      }
 
-      const message = !favoritedItems[id] ? '상품이 찜 목록에 추가되었습니다.' : '상품이 찜 목록에서 제거되었습니다.';
       Swal.fire({
-        title: !favoritedItems[id] ? '찜하기 성공' : '찜하기 해제',
-        text: message,
+        title: '찜하기 상태 변경',
+        text: '상품 찜하기 상태가 변경되었습니다.',
         icon: 'success',
         confirmButtonText: '확인',
       });
@@ -60,15 +57,15 @@ const ItemListGrid = ({ title, items }) => {
         slidesPerView={4}
         grid={{
           rows: 30,
-          fill: "row",
+          fill: 'row',
         }}
         simulateTouch={false}
         pagination={{
-          el: ".pagination_bullet",
+          el: '.pagination_bullet',
           clickable: true,
           type: 'bullets',
           renderBullet: function (index, className) {
-            return '<span class="' + className + '">' + (index + 1) + "</span>";
+            return '<span class="' + className + '">' + (index + 1) + '</span>';
           },
         }}
       >
@@ -87,18 +84,22 @@ const ItemListGrid = ({ title, items }) => {
                   />
                   <span
                     onClick={(e) => {
-                      e.stopPropagation(); // 이벤트 버블링 중단
-                      e.preventDefault(); // 기본 동작 방지
-                      handleHeartClick(item.id); // 찜 기능 동작
+                      e.stopPropagation();
+                      e.preventDefault();
+                      handleHeartClick(item.id);
                     }}
                     className="heart-icon"
                   >
-        {favoritedItems[item.id] ? (
-          <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
-        ) : (
-          <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
-        )}
-    </span>
+                    {item.heart ? (
+                      <FavoriteIcon
+                        style={{ color: 'red', fontSize: '24px' }}
+                      />
+                    ) : (
+                      <FavoriteBorderOutlinedIcon
+                        style={{ fontSize: '24px' }}
+                      />
+                    )}
+                  </span>
                   <div className="SwiperGridOverlay">
                     <div>
                       {item.name.split('|').map((part, index) => {
@@ -106,38 +107,49 @@ const ItemListGrid = ({ title, items }) => {
                         if (isKorean) {
                           const lines = part.match(/.{1,26}/g);
                           return (
-                            <span key={index} className={index > 0 ? 'SwiperGridImageInfoContainer' : ''}>
-                            {lines.map((line, lineIndex) => (
-                              <span key={lineIndex}>{line}<br /></span>
-                            ))}
-                        </span>
+                            <span
+                              key={index}
+                              className={
+                                index > 0 ? 'SwiperGridImageInfoContainer' : ''
+                              }
+                            >
+                              {lines.map((line, lineIndex) => (
+                                <span key={lineIndex}>
+                                  {line}
+                                  <br />
+                                </span>
+                              ))}
+                            </span>
                           );
                         }
                         return null;
                       })}
                       <hr />
                       <div className="SwiperGridImageInfoPriceContainer">
-                        <span className="SwiperGridImageInfoPrice">{item.price.toLocaleString()}원</span>
+                        <span className="SwiperGridImageInfoPrice">
+                          {item.price.toLocaleString()}원
+                        </span>
                       </div>
                     </div>
                   </div>
                 </div>
-
               </Link>
               <div className="SwiperGridInfoContainer">
                 <h3 className="SwiperGridInfoTitle">
                   {item.name.split('|').map((part, index) => (
-                    <span key={index} className={index > 0 ? 'SwiperGridInfoSubText' : ''}>
-                {part}
+                    <span
+                      key={index}
+                      className={index > 0 ? 'SwiperGridInfoSubText' : ''}
+                    >
+                      {part}
                       {index < item.name.split('|').length - 1 && <br />}
-            </span>
+                    </span>
                   ))}
                 </h3>
                 <p className="SwiperGridPrice" style={{ position: 'relative' }}>
                   {item.price.toLocaleString()}원
                 </p>
               </div>
-
             </div>
           </SwiperSlide>
         ))}

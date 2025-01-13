@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/swiper-bundle.css";
+import React, { useEffect, useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.css';
 import '../../css/ItemList.css';
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
-import { Link, useNavigate } from "react-router-dom"; // useNavigate로 변경
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import { Link, useNavigate } from 'react-router-dom'; // useNavigate로 변경
 import { API_SERVER_HOST } from '../../config/apiConfig';
 import GoodsImg1 from '../../img/goods.jpg';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -11,27 +11,24 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import axiosInstance from '../../api/axiosInstance'; // axiosInstance 임포트
 import Swal from 'sweetalert2'; // SweetAlert2 임포트
 
-const ItemList = ({ title, items }) => {
-  const [favoritedItems, setFavoritedItems] = useState({});
+const ItemList = ({ title, items, onHeartChange }) => {
   const navigate = useNavigate();
 
   const handleHeartClick = async (id) => {
     try {
-      const response = await axiosInstance.post(`/heart/product/${id}`, {}, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      await axiosInstance.post(`/heart/product/${id}`);
 
-      setFavoritedItems((prev) => ({
-        ...prev,
-        [id]: !prev[id],
-      }));
+      // Find the item and toggle its heart status
+      const updatedItem = items.find((item) => item.id === id);
+      if (updatedItem) {
+        updatedItem.heart = !updatedItem.heart;
+        // Notify parent component about the heart change
+        onHeartChange && onHeartChange(id, updatedItem.heart);
+      }
 
-      const message = !favoritedItems[id] ? '상품이 찜 목록에 추가되었습니다.' : '상품이 찜 목록에서 제거되었습니다.';
       Swal.fire({
-        title: !favoritedItems[id] ? '찜하기 성공' : '찜하기 해제',
-        text: message,
+        title: '찜하기 상태 변경',
+        text: '상품 찜하기 상태가 변경되었습니다.',
         icon: 'success',
         confirmButtonText: '확인',
       });
@@ -47,7 +44,6 @@ const ItemList = ({ title, items }) => {
       navigate('/login');
     }
   };
-
 
   if (!items || items.length === 0) return null;
 
@@ -81,7 +77,7 @@ const ItemList = ({ title, items }) => {
           },
           1920: {
             slidesPerView: 3,
-          }
+          },
         }}
       >
         {items.map((item) => (
@@ -104,9 +100,17 @@ const ItemList = ({ title, items }) => {
                         if (isKorean) {
                           const lines = part.match(/.{1,26}/g);
                           return (
-                            <span key={index} className={index > 0 ? 'SlideImageInfoContainer' : ''}>
+                            <span
+                              key={index}
+                              className={
+                                index > 0 ? 'SlideImageInfoContainer' : ''
+                              }
+                            >
                               {lines.map((line, lineIndex) => (
-                                <span key={lineIndex}>{line}<br /></span>
+                                <span key={lineIndex}>
+                                  {line}
+                                  <br />
+                                </span>
                               ))}
                             </span>
                           );
@@ -114,37 +118,50 @@ const ItemList = ({ title, items }) => {
                         return null;
                       })}
                       <hr />
-                      <span className='SlideImageInfoPrice'>{item.price.toLocaleString()}원</span>
+                      <span className="SlideImageInfoPrice">
+                        {item.price.toLocaleString()}원
+                      </span>
                     </div>
                   </div>
                 </div>
               </Link>
 
-              <div className="SlickInfoContainer" style={{ position: 'relative', height: '200px' }}> {/* 높이를 고정 */}
-                <h3 className="SlickInfoTitle" style={{ marginBottom: '40px' }}> {/* 하트 아이콘과의 간격 추가 */}
+              <div
+                className="SlickInfoContainer"
+                style={{ position: 'relative', height: '200px' }}
+              >
+                {' '}
+                {/* 높이를 고정 */}
+                <h3 className="SlickInfoTitle" style={{ marginBottom: '40px' }}>
+                  {' '}
+                  {/* 하트 아이콘과의 간격 추가 */}
                   {item.name.split('|').map((part, index) => (
-                    <span key={index} className={index > 0 ? 'SlickInfoSubText' : ''}>
-        {part}
+                    <span
+                      key={index}
+                      className={index > 0 ? 'SlickInfoSubText' : ''}
+                    >
+                      {part}
                       {index < item.name.split('|').length - 1 && <br />}
-      </span>
+                    </span>
                   ))}
                 </h3>
                 <p className="slide-price">{item.price.toLocaleString()}원</p>
-
-                <span onClick={() => handleHeartClick(item.id)}
-                      style={{
-                        cursor: 'pointer',
-                        position: 'absolute',
-                        bottom: '220px',
-                        right: '10px',
-                        zIndex: 1
-                      }}>
-    {favoritedItems[item.id] ? (
-      <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
-    ) : (
-      <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
-    )}
-  </span>
+                <span
+                  onClick={() => handleHeartClick(item.id)}
+                  style={{
+                    cursor: 'pointer',
+                    position: 'absolute',
+                    bottom: '220px',
+                    right: '10px',
+                    zIndex: 1,
+                  }}
+                >
+                  {item.heart ? (
+                    <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
+                  ) : (
+                    <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
+                  )}
+                </span>
               </div>
             </div>
           </SwiperSlide>

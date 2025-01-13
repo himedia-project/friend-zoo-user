@@ -19,7 +19,6 @@ const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState(
     searchParams.get('keyword') || '',
   );
-  const [favoritedItems, setFavoritedItems] = useState({});
   const [products, setProducts] = useState({ best: [], new: [], mdpick: [] });
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,21 +26,47 @@ const SearchPage = () => {
 
   const handleHeartClick = async (id) => {
     try {
-      const response = await axiosInstance.post(`/heart/product/${id}`, {}, {
-        headers: {
-          'Content-Type': 'application/json',
+      await axiosInstance.post(
+        `/heart/product/${id}`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      });
+      );
 
-      setFavoritedItems((prev) => ({
-        ...prev,
-        [id]: !prev[id],
-      }));
+      if (searchTerm) {
+        setSearchResults((prev) =>
+          prev.map((item) =>
+            item.id === id ? { ...item, heart: !item.heart } : item,
+          ),
+        );
+      } else {
+        setProducts((prev) => ({
+          best: prev.best.map((item) =>
+            item.id === id ? { ...item, heart: !item.heart } : item,
+          ),
+          new: prev.new.map((item) =>
+            item.id === id ? { ...item, heart: !item.heart } : item,
+          ),
+          mdpick: prev.mdpick.map((item) =>
+            item.id === id ? { ...item, heart: !item.heart } : item,
+          ),
+        }));
+      }
 
-      const message = !favoritedItems[id] ? '상품이 찜 목록에 추가되었습니다.' : '상품이 찜 목록에서 제거되었습니다.';
+      const isNowHearted = searchTerm
+        ? searchResults.find((item) => item.id === id)?.heart
+        : products.best.find((item) => item.id === id)?.heart ||
+          products.new.find((item) => item.id === id)?.heart ||
+          products.mdpick.find((item) => item.id === id)?.heart;
+
       Swal.fire({
-        title: !favoritedItems[id] ? '찜하기 성공' : '찜하기 해제',
-        text: message,
+        title: !isNowHearted ? '찜하기 성공' : '찜하기 해제',
+        text: !isNowHearted
+          ? '상품이 찜 목록에 추가되었습니다.'
+          : '상품이 찜 목록에서 제거되었습니다.',
         icon: 'success',
         confirmButtonText: '확인',
       });
@@ -53,8 +78,8 @@ const SearchPage = () => {
         icon: 'error',
         confirmButtonText: '확인',
       });
-        navigate('/login');
-        window.scrollTo(0, 0);
+      navigate('/login');
+      window.scrollTo(0, 0);
     }
   };
 
@@ -149,7 +174,13 @@ const SearchPage = () => {
                       </span>
                     ))}
                   </h3>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}
+                  >
                     <p className="price" style={{ marginRight: '8px' }}>
                       {item.price.toLocaleString()}원
                     </p>
@@ -160,12 +191,16 @@ const SearchPage = () => {
                       }}
                       style={{ cursor: 'pointer', zIndex: 1 }}
                     >
-                        {favoritedItems[item.id] ? (
-                          <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
-                        ) : (
-                          <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
-                        )}
-                      </span>
+                      {item.heart ? (
+                        <FavoriteIcon
+                          style={{ color: 'red', fontSize: '24px' }}
+                        />
+                      ) : (
+                        <FavoriteBorderOutlinedIcon
+                          style={{ fontSize: '24px' }}
+                        />
+                      )}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -195,12 +230,18 @@ const SearchPage = () => {
                           key={index}
                           className={index > 0 ? 'product-info-sub' : ''}
                         >
-                {part}
+                          {part}
                           {index < item.name.split('|').length - 1 && <br />}
-              </span>
+                        </span>
                       ))}
                     </h3>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}
+                    >
                       <p className="price" style={{ marginRight: '8px' }}>
                         {item.price.toLocaleString()}원
                       </p>
@@ -211,12 +252,16 @@ const SearchPage = () => {
                         }}
                         style={{ cursor: 'pointer', zIndex: 1 }}
                       >
-              {favoritedItems[item.id] ? (
-                <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
-              ) : (
-                <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
-              )}
-            </span>
+                        {item.heart ? (
+                          <FavoriteIcon
+                            style={{ color: 'red', fontSize: '24px' }}
+                          />
+                        ) : (
+                          <FavoriteBorderOutlinedIcon
+                            style={{ fontSize: '24px' }}
+                          />
+                        )}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -247,12 +292,18 @@ const SearchPage = () => {
                           key={index}
                           className={index > 0 ? 'product-info-sub' : ''}
                         >
-                {part}
+                          {part}
                           {index < item.name.split('|').length - 1 && <br />}
-              </span>
+                        </span>
                       ))}
                     </h3>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}
+                    >
                       <p className="price" style={{ marginRight: '8px' }}>
                         {item.price.toLocaleString()}원
                       </p>
@@ -263,12 +314,16 @@ const SearchPage = () => {
                         }}
                         style={{ cursor: 'pointer', zIndex: 1 }}
                       >
-              {favoritedItems[item.id] ? (
-                <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
-              ) : (
-                <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
-              )}
-            </span>
+                        {item.heart ? (
+                          <FavoriteIcon
+                            style={{ color: 'red', fontSize: '24px' }}
+                          />
+                        ) : (
+                          <FavoriteBorderOutlinedIcon
+                            style={{ fontSize: '24px' }}
+                          />
+                        )}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -304,7 +359,13 @@ const SearchPage = () => {
                         </span>
                       ))}
                     </h3>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}
+                    >
                       <p className="price" style={{ marginRight: '8px' }}>
                         {item.price.toLocaleString()}원
                       </p>
@@ -315,15 +376,18 @@ const SearchPage = () => {
                         }}
                         style={{ cursor: 'pointer', zIndex: 1 }}
                       >
-                        {favoritedItems[item.id] ? (
-                          <FavoriteIcon style={{ color: 'red', fontSize: '24px' }} />
+                        {item.heart ? (
+                          <FavoriteIcon
+                            style={{ color: 'red', fontSize: '24px' }}
+                          />
                         ) : (
-                          <FavoriteBorderOutlinedIcon style={{ fontSize: '24px' }} />
+                          <FavoriteBorderOutlinedIcon
+                            style={{ fontSize: '24px' }}
+                          />
                         )}
                       </span>
                     </div>
                   </div>
-
                 </div>
               ))}
             </div>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Switch, FormControlLabel } from '@mui/material';
 import SliderComponent from '../../components/post/MainSlider';
 import CategoryButton from '../../components/post/CategoryButton';
 import CategoryItemList from '../../components/post/CategoryItemList';
@@ -8,9 +7,7 @@ import { getCategoryId } from '../../api/productApi';
 
 const CategoryPage = () => {
   const { categoryId } = useParams();
-
   const [categoryName, setCategoryName] = useState('');
-
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,7 +20,6 @@ const CategoryPage = () => {
   const fetchProducts = async (categoryId) => {
     try {
       const categoryProducts = await getCategoryId(categoryId);
-      console.log('categoryProducts: ', categoryProducts);
       setProducts(categoryProducts);
     } catch (error) {
       console.error('상품 목록 로딩 실패:', error);
@@ -31,6 +27,14 @@ const CategoryPage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleHeartChange = (productId, heartStatus) => {
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === productId ? { ...product, heart: heartStatus } : product,
+      ),
+    );
   };
 
   const updateCategoryName = (categoryId) => {
@@ -67,18 +71,12 @@ const CategoryPage = () => {
     }
   };
 
-
-  const itemComponents = {
-    2: <CategoryItemList items={products} />,
-  };
-
   return (
     <div>
       <SliderComponent />
       <h1>{categoryName}</h1>
       <CategoryButton />
-
-      {Object.keys(products).map((item) => itemComponents[item])}
+      <CategoryItemList items={products} onHeartChange={handleHeartChange} />
     </div>
   );
 };

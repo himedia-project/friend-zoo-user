@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import Swal from 'sweetalert2';
 import { postOrder } from '../../api/orderApi';
+import { getProductById } from '../../api/productApi';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
@@ -44,10 +45,7 @@ const ProductDetailPage = () => {
 
   const fetchProductDetail = async () => {
     try {
-      const response = await fetch(
-        `${API_SERVER_HOST}/api/product/detail/${productId}`,
-      );
-      const data = await response.json();
+      const data = await getProductById(productId);
       const productData = {
         ...data,
         rating: 4,
@@ -203,12 +201,26 @@ const ProductDetailPage = () => {
     }
   };
 
+  // 새로나온 상품 찜하기 상태 변경 함수
+  const handleNewItemHeartChange = (productId, newHeartStatus) => {
+    setProducts((prev) => ({
+      ...prev,
+      new: prev.new.map((item) =>
+        item.id === productId ? { ...item, heart: newHeartStatus } : item,
+      ),
+    }));
+  };
+
   if (loading) return;
   if (error) return <div>문제가 발생했습니다: {error.message}</div>;
 
   return (
     <div className="App">
-      <ItemList title="🧸 새로나온 신상 상품! 🧩" items={products.new} />
+      <ItemList
+        title="🧸 새로나온 신상 상품! 🧩"
+        items={products.new}
+        onHeartChange={handleNewItemHeartChange}
+      />
       <hr />
       <br />
       <br />
