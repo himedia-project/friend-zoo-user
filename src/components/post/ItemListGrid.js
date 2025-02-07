@@ -42,7 +42,7 @@ const ItemListGrid = ({ title, items, onHeartChange }) => {
         icon: 'error',
         confirmButtonText: '확인',
       });
-      window.scrollTo(0, 0);
+      // window.scrollTo(0, 0);
       navigate('/login');
     }
   };

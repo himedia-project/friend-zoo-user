@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { postOrder, getOrderList } from '../../api/orderApi';
 import { API_SERVER_HOST } from '../../config/apiConfig';
 import '../../css/PaymentPage.css';
+import { loadTossPayments } from '@tosspayments/payment-sdk';
+import { paymentApi } from '../../api/paymentApi';
 
 const PaymentPage = () => {
   const location = useLocation();
@@ -18,8 +20,8 @@ const PaymentPage = () => {
 
         // Then fetch the order list to get the latest order
         const response = await getOrderList();
-        // Get the most recent order (first item in dtoList)
-        setOrderData(response.dtoList[0]);
+        const latestOrder = response.dtoList[0];
+        setOrderData(latestOrder);
       } catch (error) {
         console.error('Error fetching order data:', error);
       }
@@ -32,12 +34,49 @@ const PaymentPage = () => {
     setPaymentMethod(event.target.value);
   };
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (!paymentMethod) {
       alert('결제 방법을 선택해주세요.');
       return;
     }
-    navigate('/payment/complete');
+
+    const tossPayments = await loadTossPayments(
+      'test_ck_OyL0qZ4G1VO4mYmDbvnroWb2MQYg',
+    );
+
+    try {
+      // 결제 준비
+      await paymentApi.preparePayment({
+        orderId: orderData.orderCode,
+        amount: orderData.totalPrice,
+      });
+
+      // 결제 금액 검증
+      await paymentApi.validatePayment(
+        orderData.orderCode,
+        orderData.totalPrice,
+      );
+
+      // 결제 요청
+      await tossPayments.requestPayment(
+        paymentMethod === '간편결제' ? 'CARD' : 'VIRTUAL_ACCOUNT',
+        {
+          amount: orderData.totalPrice,
+          orderId: orderData.orderCode,
+          orderName: `${orderData.orderItems[0].productName} ${
+            orderData.orderItems.length > 1
+              ? `외 ${orderData.orderItems.length - 1}건`
+              : ''
+          }`,
+          customerName: orderData.name,
+          successUrl: `${window.location.origin}/payment/success`,
+          failUrl: `${window.location.origin}/payment/fail`,
+        },
+      );
+    } catch (error) {
+      console.error('결제 요청 실패:', error);
+      alert('결제 요청이 실패했습니다. 다시 시도해주세요.');
+    }
   };
 
   if (!orderData) return;
@@ -97,16 +136,16 @@ const PaymentPage = () => {
       <div className="payment-methods">
         <label
           className={`payment-method-option ${
-            paymentMethod === '신용카드' ? 'selected' : ''
+            paymentMethod === '간편결제' ? 'selected' : ''
           }`}
         >
           <input
             type="radio"
-            value="신용카드"
-            checked={paymentMethod === '신용카드'}
+            value="간편결제"
+            checked={paymentMethod === '간편결제'}
             onChange={handlePaymentChange}
           />
-          신용카드
+          간편결제
         </label>
         <label
           className={`payment-method-option ${

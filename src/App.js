@@ -22,11 +22,12 @@ import ProductDetailPage from './pages/HomePage/ProductDetailPage';
 import SignInPage from './pages/login/SignInPage';
 import MyPage from './pages/My/MyPage';
 import OrderHistoryPage from './pages/order/OrderHistoryPage';
-import PaymentPage from './pages/order/PaymentPage';
-import PayCompletePage from './pages/order/PayCompletePage';
+import PaymentPage from './pages/payment/PaymentPage';
 import NotFound from './components/common/NotFound';
 import SearchPage from './pages/search/SearchPage';
 import KakaoRedirectPage from './pages/login/KakaoRedirectPage';
+import PaymentSuccessPage from './pages/payment/PaymentSuccessPage';
+import PaymentFailPage from './pages/payment/PaymentFailPage';
 
 function App() {
   return (
@@ -56,8 +57,9 @@ function App() {
         <Route path="/heart" element={<MyPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/payment" element={<PaymentPage />} />
-        <Route path="/payment/complete" element={<PayCompletePage />} />
         <Route path="/order/history" element={<OrderHistoryPage />} />
+        <Route path="/payment/success" element={<PaymentSuccessPage />} />
+        <Route path="/payment/fail" element={<PaymentFailPage />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

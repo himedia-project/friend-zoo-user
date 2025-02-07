@@ -11,9 +11,6 @@ const redirect_uri = `${FRONT_HOST}/member/kakao`; // http://43.200.239.220:3000
 // 인증 code 요청 url
 const auth_code_path = `https://kauth.kakao.com/oauth/authorize`;
 
-// access token 요청 url
-const access_token_url = `https://kauth.kakao.com/oauth/token`;
-
 // 환경변수에서 값을 제대로 가져오는지 디버깅을 위해 로깅
 console.log('REST API KEY:', rest_api_key);
 console.log('FRONT HOST:', FRONT_HOST);

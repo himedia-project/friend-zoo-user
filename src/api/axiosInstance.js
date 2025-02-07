@@ -2,13 +2,33 @@
 import axios from 'axios';
 import store from '../redux/store';
 import { API_SERVER_HOST } from '../config/apiConfig';
-import { setAccessToken } from '../redux/loginSlice';
+import { login } from '../redux/loginSlice';
 
 const axiosInstance = axios.create({
   baseURL: `${API_SERVER_HOST}/api`,
   // 쿠키 허용
   withCredentials: true,
 });
+
+// JWT 토큰에서 사용자 정보 추출하는 함수
+const parseJWT = (token) => {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join(''),
+    );
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.error('JWT 파싱 에러:', error);
+    return null;
+  }
+};
 
 const refreshJWT = async () => {
   const res = await axiosInstance.get(`/member/refresh`);
@@ -50,9 +70,22 @@ axiosInstance.interceptors.response.use(
       const result = await refreshJWT();
       console.log('refreshJWT RESULT', result);
 
-      const accessToken = result.newAccessToken;
+      const newAccessToken = result.newAccessToken;
 
-      store.dispatch(setAccessToken(accessToken));
+      // JWT 토큰에서 사용자 정보 추출
+      const userInfo = parseJWT(newAccessToken);
+
+      // store.dispatch(setAccessToken(accessToken));
+      // Redux store 업데이트 (accessToken과 함께 사용자 정보도 업데이트)
+      if (userInfo) {
+        store.dispatch(
+          login({
+            email: userInfo.email,
+            roles: userInfo.roleNames,
+            accessToken: newAccessToken,
+          }),
+        );
+      }
 
       return axiosInstance(error.config); // 재요청
     }
